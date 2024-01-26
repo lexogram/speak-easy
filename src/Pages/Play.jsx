@@ -17,12 +17,13 @@ export const Play = () => {
     ready,
     files,
     startRecording,
-    stopRecording
-  } = useContext(Context)  
-  
+    stopRecording,
+    showNext
+  } = useContext(Context)
+
   const audioRef = useRef()
   const videoRef = useRef()
-  
+
   // If `ready` is not true yet, then there will be no files...
   const { text, audio, video, image } = (files || {})
   // ... so we just need to pretend
@@ -31,7 +32,8 @@ export const Play = () => {
     : []
 
 
-  const playAudio = () => { 
+
+  const playAudio = () => {
     audioRef.current.play()
   }
 
@@ -73,6 +75,7 @@ export const Play = () => {
         style={{ display: "none" }}
       />
       <video
+        key={video} // forces video to update
         width="320"
         ref={videoRef}
         onEnded={beginRecording}
@@ -87,6 +90,11 @@ export const Play = () => {
         <span className="cue">{cue}</span>
         <span>{mark}</span>
       </p>
+      <button
+        onClick={showNext}
+      >
+        Next
+      </button>
     </div>
   )
 }

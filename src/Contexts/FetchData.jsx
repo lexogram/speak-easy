@@ -25,6 +25,8 @@ export const fetchData = async (callback) => {
       if (files.find) {
         const fileName = files.find( file => textRegex.test(file))
         return `${letter}/${word}/${fileName}`
+      } else {
+        alert (`Can't find files for ${word}`)
       }
     })
   }))

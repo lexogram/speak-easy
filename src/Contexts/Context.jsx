@@ -29,7 +29,7 @@ export const Provider = ({ children }) => {
     letter,
     words,
     word,
-    files 
+    files
   } = state
 
   const startRecording = startRef.current
@@ -41,7 +41,7 @@ export const Provider = ({ children }) => {
     if (error) {
       // TODO: Warn the user that recording won't work
       alert(error)
-      return 
+      return
     }
 
     const { startRecording, stopRecording, playback } = controls
@@ -53,7 +53,7 @@ export const Provider = ({ children }) => {
     setReadyToRecord(true)
   }
 
-  
+
 
 
   const initializeReducer = payload => {
@@ -61,9 +61,9 @@ export const Provider = ({ children }) => {
       type: "SET_DATA",
       payload
     }
-    
+
     dispatch(action)
-    
+
   }
 
 
@@ -72,7 +72,7 @@ export const Provider = ({ children }) => {
       type: "SET_LETTER",
       payload
     }
-    
+
     dispatch(action)
   }
 
@@ -82,7 +82,16 @@ export const Provider = ({ children }) => {
       type: "SET_WORD",
       payload
     }
-    
+
+    dispatch(action)
+  }
+
+
+  const showNext = () => {
+    const action = {
+      type: "SHOW_NEXT"
+    }
+
     dispatch(action)
   }
 
@@ -104,9 +113,10 @@ export const Provider = ({ children }) => {
         words,
         word,
         files,
-        
+
         setLetter,
-        setWord
+        setWord,
+        showNext
       }}
     >
       {children}

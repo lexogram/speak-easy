@@ -1,6 +1,6 @@
 /**
  * Reducer.jsx
- * 
+ *
  * Use useReducer when:
  * + The next state depends on the previous state
  * + The state is complex
@@ -44,7 +44,10 @@ const reducer = (state, action) => {
       return setLetter(state, payload)
 
     case "SET_WORD":
-    return setWord(state, payload)
+      return setWord(state, payload)
+
+    case "SHOW_NEXT":
+      return showNext(state)
 
     default:
       return {...state}
@@ -79,29 +82,19 @@ function setWord( state, word ) {
 
   const letter = word[0].toUpperCase()
   const words = Object.keys(letterData[letter])
-  const path = `${letter}/${word}/`
 
   let files = letterData[letter][word]
-  // files = files.reduce(( fileMap, fileName ) => {
-  //     const [,text,audio,video,image] = TYPE_REGEX.exec(fileName)
-
-  //     if (text) {
-  //       fileMap.text = path + fileName
-  //     } else if (audio) {
-  //       fileMap.audio = path + fileName
-  //     } else if (video) {
-  //       fileMap.video = path + fileName
-  //     } else if (image) {
-  //       fileMap.image = path + fileName
-  //     }
-
-  //     return fileMap
-  //   }, {})
-
-  console.log("files :", files );
-  
 
   return { ...state, letter, words, word, files }
+}
+
+
+const showNext = (state) => {
+  let { words, word } = state
+  const index = (words.indexOf(word) + 1) % words.length
+  word = words[index]
+
+  return setWord(state, word)
 }
 
 
