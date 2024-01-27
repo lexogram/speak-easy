@@ -26,7 +26,7 @@ export const Provider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const {
     ready,
-    letter,
+    sound,
     words,
     word,
     files
@@ -63,13 +63,12 @@ export const Provider = ({ children }) => {
     }
 
     dispatch(action)
-
   }
 
 
-  const setLetter = payload => {
+  const setSound = payload => {
     const action = {
-      type: "SET_LETTER",
+      type: "SET_SOUND",
       payload
     }
 
@@ -109,12 +108,12 @@ export const Provider = ({ children }) => {
         stopRecording,
         playback,
 
-        letter,
+        sound,
         words,
         word,
         files,
 
-        setLetter,
+        setSound,
         setWord,
         showNext
       }}

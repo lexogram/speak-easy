@@ -14,6 +14,7 @@
 const TYPE_REGEX = /( \|)|(.*\.mp3)|(.*\.mp4)|(.*\.((png)|(jpe?g)|(gif)))/i
 
 
+
 const initialState = {
   ready: false
 }
@@ -21,14 +22,15 @@ const initialState = {
 // Will become:
 // {
 //   ready: true,
-//   letter: "Б",
+//   language: "ru"
+//   sound: "Б",
 //   words: [ "бабочка", "бабушка", "балалайке", ... ],
 //   word: "бабочка",
 //   files: {
-//     audio: "Б/бабочка/бабочка.mp3",
-//     image: "Б/бабочка/бабочка.jpg",
-//     video: "Б/бабочка/бабочка.mp4",
-//     text: "Б/бабочка/бабочка.txt"
+//     audio: "ru/Б/бабочка/бабочка.mp3",
+//     image: "ru/Б/бабочка/бабочка.jpg",
+//     video: "ru/Б/бабочка/бабочка.mp4",
+//     text:  "ru/Б/бабочка/бабочка.txt"
 //   }
 // }
 
@@ -40,8 +42,11 @@ const reducer = (state, action) => {
     case "SET_DATA":
       return setData(state, payload)
 
-    case "SET_LETTER":
-      return setLetter(state, payload)
+    case "SET_LANGUAGE":
+      return setLanguage(state, payload)
+
+    case "SET_SOUND":
+      return setSound(state, payload)
 
     case "SET_WORD":
       return setWord(state, payload)
@@ -57,9 +62,22 @@ const reducer = (state, action) => {
 
 
 function setData( state, payload ) {
-  state = { ...payload, ready: true } // letterData, textMap
-  const { letterData } = payload
-  const wordData = Object.values(letterData)[0]
+  const { phrasesData } = payload
+  const language = Object.keys(phrasesData)[0]
+  state = { phrasesData, ready: true }
+
+  return setLanguage( state, language )
+}
+
+
+
+function setLanguage( state, language ) {
+  const { phrasesData } = state
+  const languageData = phrasesData[language]
+  state = { ...state, languageData }
+
+  // Choose the first word of the first sound in this language
+  const wordData = Object.values(languageData)[0]
   const word = Object.keys(wordData)[0]
 
   return setWord(state, word)
@@ -67,10 +85,10 @@ function setData( state, payload ) {
 
 
 
-function setLetter( state, letter ) {
-  // Choose the first word with this letter
-  const { letterData } = state
-  const word = Object.keys(letterData[letter])[0]
+function setSound( state, sound ) {
+  // Choose the first word with this sound
+  const { phrasesData } = state
+  const word = Object.keys(phrasesData[sound])[0]
 
   return setWord(state, word)
 }
@@ -78,14 +96,26 @@ function setLetter( state, letter ) {
 
 
 function setWord( state, word ) {
-  const { letterData } = state
+  const { languageData } = state
+  // { "б": { "бабочка": [ ... ]}}
+  // OR
+  // { "b": { "01-bee": [ ... ]}}
 
-  const letter = word[0].toUpperCase()
-  const words = Object.keys(letterData[letter])
+  const [ sound ] = Object.entries(languageData).find(
+    ([ key, value ]) => {
+      const words = Object.keys(value)
+      if (words.indexOf(word) < 0) {
+        return false
+      }
 
-  let files = letterData[letter][word]
+      return true
+    }
+  )
+  const words = Object.keys(languageData[sound])
 
-  return { ...state, letter, words, word, files }
+  let files = languageData[sound][word]
+
+  return { ...state, sound, words, word, files }
 }
 
 

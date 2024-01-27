@@ -19,3 +19,15 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+#play {
+  --size: 320px;
+  width: var(--size);
+}
+
+#play img {
+  width: var(--size);
+  height: var(--size);
+  object-fit: contain;
+  background-color: #fff;
+}

@@ -7,7 +7,7 @@ import React, { useContext, useRef } from 'react'
 import { Context } from '../Contexts/Context'
 
 
-const CUE_REGEX = /(.*)\|(.*)([.!?])?/
+const CUE_REGEX = /(.*)\|\s*([^.!?]*)([.!?])?/
 const CUE_DELAY = 1000
 const RECORD_DURATION = 2000
 
@@ -30,7 +30,6 @@ export const Play = () => {
   const [ , prompt, cue, mark ] = text
     ? CUE_REGEX.exec(text)
     : []
-
 
 
   const playAudio = () => {
@@ -63,11 +62,15 @@ export const Play = () => {
   }
 
 
+  const type = video.match(/\.mpg$/i) ? "video/mpeg" : "video/mp4"
+
+
   return (
     <div
       id="play"
       onClick={playAudio}
     >
+      { image && <img src={image} alt={cue} /> }
       <audio
         src={audio}
         ref={audioRef}
@@ -82,7 +85,7 @@ export const Play = () => {
       >
        <source
         src={video}
-        type="video/mp4"
+        type={type}
         />
       </video>
       <p>
