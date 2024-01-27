@@ -66,6 +66,16 @@ export const Provider = ({ children }) => {
   }
 
 
+  const setLanguage = payload => {
+    const action = {
+      type: "SET_LANGUAGE",
+      payload
+    }
+
+    dispatch(action)
+  }
+
+
   const setSound = payload => {
     const action = {
       type: "SET_SOUND",
@@ -113,6 +123,7 @@ export const Provider = ({ children }) => {
         word,
         files,
 
+        setLanguage,
         setSound,
         setWord,
         showNext

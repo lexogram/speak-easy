@@ -10,6 +10,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --size: 320px;
 }
 
 body {
@@ -21,7 +23,6 @@ body {
 }
 
 #play {
-  --size: 320px;
   width: var(--size);
 }
 
@@ -30,4 +31,16 @@ body {
   height: var(--size);
   object-fit: contain;
   background-color: #fff;
+}
+
+#language {
+  position: fixed;
+  top: 0;
+  width: var(--size);
+  display: flex;
+  justify-content: stretch;
+}
+
+#language * {
+  flex-grow: 1;
 }
