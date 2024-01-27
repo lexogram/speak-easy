@@ -8,7 +8,7 @@ const TYPE_REGEX = /(.*\.txt)|(.*\.mp3)|(.*\.mp[g4])|(.*\.((png)|(jpe?g)|(gif)))
 
 const TEXT_REGEX = /^.*\.txt$/i
 const WORD_REGEX = /^(\w+)\/(.+)\/(\d*-?.*)\//
-const FOLDER_NAME = "phrases"
+const FOLDER_NAME = "speak-easy/phrases"
 
 
 
@@ -32,12 +32,12 @@ export const fetchData = async (callback) => {
       })
     }))
   }))
-  // console.log("txts:", txts);
+  console.log("txts:", txts);
 
 
   const setText = (text, index) => {
     const [ , lang, sound, folder ] = WORD_REGEX.exec(txts[index])
-    const path = `${FOLDER_NAME}/${lang}/${sound}/${folder}/`
+    const path = `/${FOLDER_NAME}/${lang}/${sound}/${folder}/`
 
     const wordData = phrasesData[lang][sound]
     let files = wordData[folder]
@@ -62,6 +62,11 @@ export const fetchData = async (callback) => {
       }, {})
     }
   }
+
+  console.log("phrasePath + txts[2]:", phrasePath + txts[2]);
+
+  console.log("phrasePath + txts[12]:", phrasePath + txts[12]);
+  
 
 
   const promises = txts.map(( filePath, index ) => (

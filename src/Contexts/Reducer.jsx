@@ -63,7 +63,7 @@ const reducer = (state, action) => {
 
 function setData( state, payload ) {
   const { phrasesData } = payload
-  const language = Object.keys(phrasesData)[1]
+  const language = Object.keys(phrasesData)[0]
   state = { phrasesData, ready: true }
 
   return setLanguage( state, language )
@@ -77,7 +77,7 @@ function setLanguage( state, language ) {
   state = { ...state, languageData }
 
   // Choose the first word of the first sound in this language
-  const wordData = Object.values(languageData)[0]
+  const wordData = Object.values(languageData)[2]
   const word = Object.keys(wordData)[0]
 
   return setWord(state, word)

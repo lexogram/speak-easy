@@ -3,7 +3,12 @@
  */
 
 
-import React, { useContext, useRef } from 'react'
+import React, {
+  useContext,
+  useRef,
+  useState,
+  useEffect,
+} from 'react'
 import { Context } from '../Contexts/Context'
 import { Buttons } from '../Components/Buttons'
 
@@ -11,6 +16,7 @@ import { Buttons } from '../Components/Buttons'
 const CUE_REGEX = /(.*)\|\s*([^.!?]*)([.!?])?/
 const CUE_DELAY = 1000
 const RECORD_DURATION = 2000
+const NEXT_DELAY = 100
 
 
 export const Play = () => {
@@ -22,24 +28,24 @@ export const Play = () => {
     showNext
   } = useContext(Context)
 
-  const listeners = {
-    startRecording,
-    stopRecording,
-    showNext
-  }
-
   const audioRef = useRef()
   const videoRef = useRef()
+  const [ auto, setAuto ] = useState(false)
+  
 
   // If `ready` is not true yet, then there will be no files...
   const { text, audio, video, image } = (files || {})
   // ... so we just need to pretend
+
+  // if (files) {
+  //   console.log({ text, audio, video, image })
+  // }
   const [ , prompt, cue, mark ] = text
-    ? CUE_REGEX.exec(text)
+    ? CUE_REGEX.exec(text || "")
     : []
 
 
-  const playAudio = () => {
+  const playPrompt = () => {
     audioRef.current.play()
   }
 
@@ -54,14 +60,35 @@ export const Play = () => {
 
 
   const beginRecording = () => {
-    startRecording()
-    setTimeout(endRecording, RECORD_DURATION)
+    if (auto) {
+      startRecording()
+      setTimeout(endRecording, RECORD_DURATION)
+    }
   }
 
 
   const endRecording = () => {
     stopRecording()
+    if (auto) {
+      setTimeout(showNext, RECORD_DURATION + NEXT_DELAY)
+    }
   }
+
+
+  const toggleAuto = () => {
+    setAuto(!auto)
+  }
+
+
+  const doAutoRun = () => {
+    if (ready && auto) {
+      playPrompt()
+    }
+  }
+
+
+  useEffect(doAutoRun, [audio])
+
 
 
   if (!ready) {
@@ -71,11 +98,19 @@ export const Play = () => {
 
   const type = video.match(/\.mpg$/i) ? "video/mpeg" : "video/mp4"
 
+  const listeners = {
+    startRecording,
+    endRecording,
+    showNext,
+    playPrompt,
+    toggleAuto
+  }
+
 
   return (
     <div
       id="play"
-      onClick={playAudio}
+      // onClick={playAudio}
     >
       { image && <img src={image} alt={cue} /> }
       <audio
@@ -103,6 +138,7 @@ export const Play = () => {
 
       <Buttons
         listeners={listeners}
+        auto={auto}
       />
     </div>
   )
