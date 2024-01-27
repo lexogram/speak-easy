@@ -5,6 +5,7 @@
 
 import React, { useContext, useRef } from 'react'
 import { Context } from '../Contexts/Context'
+import { Buttons } from '../Components/Buttons'
 
 
 const CUE_REGEX = /(.*)\|\s*([^.!?]*)([.!?])?/
@@ -20,6 +21,12 @@ export const Play = () => {
     stopRecording,
     showNext
   } = useContext(Context)
+
+  const listeners = {
+    startRecording,
+    stopRecording,
+    showNext
+  }
 
   const audioRef = useRef()
   const videoRef = useRef()
@@ -93,11 +100,10 @@ export const Play = () => {
         <span className="cue">{cue}</span>
         <span>{mark}</span>
       </p>
-      <button
-        onClick={showNext}
-      >
-        Next
-      </button>
+
+      <Buttons
+        listeners={listeners}
+      />
     </div>
   )
 }

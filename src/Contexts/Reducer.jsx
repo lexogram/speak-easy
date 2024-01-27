@@ -63,7 +63,7 @@ const reducer = (state, action) => {
 
 function setData( state, payload ) {
   const { phrasesData } = payload
-  const language = Object.keys(phrasesData)[0]
+  const language = Object.keys(phrasesData)[1]
   state = { phrasesData, ready: true }
 
   return setLanguage( state, language )
