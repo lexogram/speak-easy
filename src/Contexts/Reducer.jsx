@@ -77,7 +77,7 @@ function setLanguage( state, language ) {
   state = { ...state, languageData }
 
   // Choose the first word of the first sound in this language
-  const wordData = Object.values(languageData)[2]
+  const wordData = Object.values(languageData)[0]
   const word = Object.keys(wordData)[0]
 
   return setWord(state, word)

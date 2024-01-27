@@ -12,13 +12,11 @@ const FOLDER_NAME = "speak-easy/phrases"
 
 
 
-
 export const fetchData = async (callback) => {
 
   const { protocol, host } = location
   const phrasePath = `${protocol}//${host}/${FOLDER_NAME}/`
 
-  // console.log("phrasesData:", phrasesData);
 
   const txts = [].concat(...Object.entries(phrasesData).map(([ language, files ]) => {
     return [].concat(...Object.entries(files).map(([letter, words]) => {
@@ -32,7 +30,6 @@ export const fetchData = async (callback) => {
       })
     }))
   }))
-  console.log("txts:", txts);
 
 
   const setText = (text, index) => {
@@ -63,17 +60,13 @@ export const fetchData = async (callback) => {
     }
   }
 
-  console.log("phrasePath + txts[2]:", phrasePath + txts[2]);
-
-  console.log("phrasePath + txts[12]:", phrasePath + txts[12]);
-  
-
 
   const promises = txts.map(( filePath, index ) => (
     fetch(phrasePath + filePath)
     .then(response => response.text())
     .then(text => setText(text, index))
   ))
+
 
   Promise.all(promises).then(() => {
     callback({ phrasesData })

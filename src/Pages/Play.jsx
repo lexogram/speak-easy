@@ -36,12 +36,8 @@ export const Play = () => {
   // If `ready` is not true yet, then there will be no files...
   const { text, audio, video, image } = (files || {})
   // ... so we just need to pretend
-
-  // if (files) {
-  //   console.log({ text, audio, video, image })
-  // }
   const [ , prompt, cue, mark ] = text
-    ? CUE_REGEX.exec(text || "")
+    ? CUE_REGEX.exec(text)
     : []
 
 
