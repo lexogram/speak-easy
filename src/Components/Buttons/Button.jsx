@@ -3,12 +3,21 @@
  */
 
 
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { Context } from '../../Contexts/Context'
 
 
-export const Button = ({ action, name, colours={}}) => {
+export const Button = ({
+  action,
+  role,
+  name,
+  colours={},
+}) => {
+  const { step } = useContext(Context)
   const [ hover, setHover ] = useState(false)
   const [ down, setDown ] = useState(false)
+
+  const isActive = step === role
 
 
   const c = {
@@ -35,12 +44,20 @@ export const Button = ({ action, name, colours={}}) => {
   }
 
   const style = {
-    backgroundColor: (down)
+    backgroundColor: (down || isActive)
                      ? c.bgd
                      : (hover) ? c.bgh : c.bg,
-    borderColor: (hover) ? c.bdh : (down) ? c.bdd : c.bd,
-    borderStyle: (down) ? "inset" : "outset",
-    color: (down) ? c.cd : c.c
+    borderColor:     (hover)
+                     ? c.bdh
+                     : (down || isActive)
+                       ? c.bdd
+                       : c.bd,
+    borderStyle:     (down || isActive)
+                     ? "inset"
+                     : "outset",
+    color:           (down || isActive)
+                     ? c.cd
+                     : c.c
   }
 
   return (

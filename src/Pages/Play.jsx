@@ -16,6 +16,7 @@ import { Buttons } from '../Components/Buttons'
 const CUE_REGEX = /(.*)\|\s*([^.!?]*)([.!?])?/
 const CUE_DELAY = 1000
 const RECORD_DURATION = 2000
+const MAX_RECORD_DURATION = 5000
 const NEXT_DELAY = 100
 
 
@@ -25,13 +26,15 @@ export const Play = () => {
     files,
     startRecording,
     stopRecording,
-    showNext
+    showNext,
+    step,
+    setStep
   } = useContext(Context)
 
   const audioRef = useRef()
   const videoRef = useRef()
   const [ auto, setAuto ] = useState(false)
-  
+
 
   // If `ready` is not true yet, then there will be no files...
   const { text, audio, video, image } = (files || {})
@@ -43,6 +46,7 @@ export const Play = () => {
 
   const playPrompt = () => {
     audioRef.current.play()
+    setStep("play")
   }
 
 
@@ -50,16 +54,27 @@ export const Play = () => {
     setTimeout(startVideo, CUE_DELAY)
   }
 
+
   const startVideo = () => {
     videoRef.current.play()
   }
 
 
-  const beginRecording = () => {
-    if (auto) {
-      startRecording()
-      setTimeout(endRecording, RECORD_DURATION)
+  const beginRecording = ({ type }) => {
+    if (auto || type === "click") {
+      if (auto) {
+        setTimeout(endRecording, RECORD_DURATION)
+      } else {
+        setTimeout(endRecording, MAX_RECORD_DURATION)
+      }
+
+      setStep("record")
+
+    } else {
+      setStep()
     }
+
+    startRecording()
   }
 
 
@@ -67,6 +82,10 @@ export const Play = () => {
     stopRecording()
     if (auto) {
       setTimeout(showNext, RECORD_DURATION + NEXT_DELAY)
+      setStep("listen")
+
+    } else {
+      setStep()
     }
   }
 
@@ -95,7 +114,7 @@ export const Play = () => {
   const type = video.match(/\.mpg$/i) ? "video/mpeg" : "video/mp4"
 
   const listeners = {
-    startRecording,
+    beginRecording,
     endRecording,
     showNext,
     playPrompt,
@@ -106,7 +125,6 @@ export const Play = () => {
   return (
     <div
       id="play"
-      // onClick={playAudio}
     >
       { image && <img src={image} alt={cue} /> }
       <audio

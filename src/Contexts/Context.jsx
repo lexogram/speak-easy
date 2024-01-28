@@ -22,7 +22,7 @@ export const Provider = ({ children }) => {
   const startRef = useRef()
   const stopRef = useRef()
   const playRef = useRef()
-  const [ readyToRecord, setReadyToRecord ] = useState(false)
+  const [ step, setStep ] = useState()
   const [state, dispatch] = useReducer(reducer, initialState)
   const {
     ready,
@@ -49,8 +49,6 @@ export const Provider = ({ children }) => {
     startRef.current = startRecording
     stopRef.current = stopRecording
     playRef.current = playback
-
-    setReadyToRecord(true)
   }
 
 
@@ -126,7 +124,10 @@ export const Provider = ({ children }) => {
         setLanguage,
         setSound,
         setWord,
-        showNext
+        showNext,
+
+        step,
+        setStep
       }}
     >
       {children}

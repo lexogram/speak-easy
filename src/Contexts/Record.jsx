@@ -14,27 +14,30 @@ export const getRecorder = async(callback, audio) => {
 
       const startRecording = () => {
         mediaRecorder.start()
-        // console.log("mediaRecorder started")
+        console.log("mediaRecorder started")
       }
 
       mediaRecorder.ondataavailable = event => {
         chunks.push(event.data);
-        // console.log("pushing chunk")
+        console.log("pushing chunk")
       };
 
       const stopRecording = () => {
         mediaRecorder.stop()
-        // console.log("media recorder stopped")
+        console.log("media recorder stopped")
       }
 
       const saveRecording = () => {
+        console.log("saveRecording called");
+
         const type = mediaRecorder.mimeType
         const blob = new Blob(chunks, { type })
         chunks = [] // for next time
         const audioURL = window.URL.createObjectURL(blob)
         audio.src = audioURL
-        // console.log("recording saved")
+        console.log("recording saved")
         audio.play()
+        console.log("audio played?")
       }
 
       mediaRecorder.onstop = saveRecording

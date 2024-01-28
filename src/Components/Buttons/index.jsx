@@ -17,22 +17,27 @@ export const Buttons = ({ listeners, auto }) => {
       <Button
         action={listeners.playPrompt}
         name="Play"
+        role="play"
       />
       <RecordButton
-        action={listeners.startRecording}
+        action={listeners.beginRecording}
         name="Record"
+        role="record"
       />
       <Button
         action={listeners.endRecording}
         name="Stop"
+        role="stop"
       />
       <Button
         action={listeners.playBack}
         name="Listen"
+        role="listen"
       />
       <Button
         action={listeners.showNext}
         name="Next"
+        role="next"
       />
       <ToggleAuto
         toggleAuto={listeners.toggleAuto}
