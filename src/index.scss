@@ -12,6 +12,8 @@
   -moz-osx-font-smoothing: grayscale;
 
   --size: 320px;
+  --ratio: 0.7;
+  --percentage: calc(var(--ratio) * 100%);
 }
 
 body {
@@ -43,4 +45,45 @@ body {
 
 #language * {
   flex-grow: 1;
+}
+
+#buttons {
+  --width: 20%;
+  --height: 3rem;
+  --radius: 0.5rem;
+
+  button,
+  .record-button {
+    display: inline-block;
+    position: relative; /* for .frame and .progress */
+    width: var(--width);
+  }
+
+  button,
+  .record-button,
+  .record-button div  {
+    height: var(--height);
+    border-radius: var(--radius);
+  }
+
+  .record-button div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+
+  .record-button button,
+  .record-button .frame {
+    width: 100%;
+  }
+
+  div.progress {
+    width: var(--percentage);
+    background-color: #f003;
+  }
+
+  label {
+    display: block;
+  }
 }

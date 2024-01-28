@@ -5,10 +5,8 @@
 
 import React from 'react'
 import { ToggleAuto } from './ToggleAuto'
-import { PlayPrompt } from './PlayPrompt'
-import { Record } from './Record'
-import { Stop } from './Stop'
-import { Next } from './Next'
+import { Button } from './Button'
+import { RecordButton } from './RecordButton'
 
 
 export const Buttons = ({ listeners, auto }) => {
@@ -16,21 +14,29 @@ export const Buttons = ({ listeners, auto }) => {
 
   return (
     <div id="buttons">
+      <Button
+        action={listeners.playPrompt}
+        name="Play"
+      />
+      <RecordButton
+        action={listeners.startRecording}
+        name="Record"
+      />
+      <Button
+        action={listeners.endRecording}
+        name="Stop"
+      />
+      <Button
+        action={listeners.playBack}
+        name="Listen"
+      />
+      <Button
+        action={listeners.showNext}
+        name="Next"
+      />
       <ToggleAuto
         toggleAuto={listeners.toggleAuto}
         auto={auto}
-      />
-      <PlayPrompt
-        action={listeners.playPrompt}
-      />
-      <Record
-        action={listeners.startRecording}
-      />
-      <Stop
-        action={listeners.endRecording}
-      />
-      <Next
-        action={listeners.showNext}
       />
     </div>
   )
