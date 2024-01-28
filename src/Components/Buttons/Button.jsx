@@ -3,8 +3,7 @@
  */
 
 
-import React, { useState, useContext } from 'react'
-import { Context } from '../../Contexts/Context'
+import React, { useState } from 'react'
 
 
 export const Button = ({
@@ -12,8 +11,8 @@ export const Button = ({
   role,
   name,
   colours={},
+  step
 }) => {
-  const { step } = useContext(Context)
   const [ hover, setHover ] = useState(false)
   const [ down, setDown ] = useState(false)
 

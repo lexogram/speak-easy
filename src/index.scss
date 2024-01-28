@@ -12,8 +12,7 @@
   -moz-osx-font-smoothing: grayscale;
 
   --size: 320px;
-  --ratio: 0.7;
-  --percentage: calc(var(--ratio) * 100%);
+  --record-duration: 1000ms;
 }
 
 body {
@@ -79,8 +78,14 @@ body {
   }
 
   div.progress {
-    width: var(--percentage);
+    width: 0;
     background-color: #f003;
+  }
+
+  div.progress.recording {
+    width: 100%;
+    transition: width var(--record-duration);
+    transition-timing-function: linear; /* after override ease */
   }
 
   label {

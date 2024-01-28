@@ -60,14 +60,20 @@ export const Play = () => {
   }
 
 
+  const setRecordingDuration = () => {
+    const duration = auto ? RECORD_DURATION : MAX_RECORD_DURATION
+    document.documentElement.style.setProperty(
+      "--record-duration", duration + "ms"
+    )
+    return duration
+  }
+
+
   const beginRecording = ({ type }) => {
     if (auto || type === "click") {
-      if (auto) {
-        setTimeout(endRecording, RECORD_DURATION)
-      } else {
-        setTimeout(endRecording, MAX_RECORD_DURATION)
-      }
-
+      const duration = setRecordingDuration()
+      setTimeout(endRecording, duration)
+    
       setStep("record")
 
     } else {

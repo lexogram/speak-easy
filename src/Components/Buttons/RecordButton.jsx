@@ -8,6 +8,8 @@ import { Button } from './Button'
 
 
 export const RecordButton = (props) => {
+  const { step } = props
+  const isActive = step === "record"
 
   const colours = {
     bgh: "#711",
@@ -16,6 +18,8 @@ export const RecordButton = (props) => {
     bdh: "#933",
   }
 
+  const className = `progress${isActive ? " recording" : ""}`
+
   return (
     <div className="record-button">
       <Button
@@ -23,7 +27,7 @@ export const RecordButton = (props) => {
         colours={colours}
       />
       <div className="frame">
-        <div className="progress" />
+        <div className={className} />
       </div>
     </div>
   )
