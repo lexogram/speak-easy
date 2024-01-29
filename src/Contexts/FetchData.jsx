@@ -4,7 +4,7 @@
 
 
 import phrasesData from '../data/index.json'
-const TYPE_REGEX = /(.*\.txt)|(.*\.mp3)|(.*\.mp[g4])|(.*\.((png)|(jpe?g)|(gif)))/i
+const TYPE_REGEX = /(.*\.txt)|(.*\.mp3)|(.*\.m(?:p[g4])|(?:4v))|(.*\.((png)|(jpe?g)|(gif)))/i
 
 const TEXT_REGEX = /^.*\.txt$/i
 const WORD_REGEX = /^(\w+)\/(.+)\/(\d*-?.*)\//
