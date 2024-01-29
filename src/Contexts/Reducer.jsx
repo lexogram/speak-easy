@@ -23,6 +23,7 @@ const initialState = {
 // {
 //   ready: true,
 //   language: "ru"
+//   sounds: [ "Б", "В", "Г", ... ]
 //   sound: "Б",
 //   words: [ "бабочка", "бабушка", "балалайке", ... ],
 //   word: "бабочка",
@@ -74,21 +75,27 @@ function setData( state, payload ) {
 function setLanguage( state, language ) {
   const { phrasesData } = state
   const languageData = phrasesData[language]
-  state = { ...state, languageData }
+  const sounds = Object.keys(languageData)
+  state = { ...state, language, languageData, sounds }
 
-  // Choose the first word of the first sound in this language
-  const wordData = Object.values(languageData)[0]
-  const word = Object.keys(wordData)[0]
+  // // Choose the first word of the first sound in this language
+  // const wordData = Object.values(languageData)[0]
+  // const word = Object.keys(wordData)[0]
 
-  return setWord(state, word)
+  // return setWord(state, word)
+  return { ...state }
 }
 
 
 
 function setSound( state, sound ) {
   // Choose the first word with this sound
-  const { phrasesData } = state
-  const word = Object.keys(phrasesData[sound])[0]
+  const { languageData } = state
+  const soundData = languageData[sound]
+
+  state.demo = soundData.__demo__
+
+  const word = Object.keys(soundData)[0]
 
   return setWord(state, word)
 }
@@ -96,12 +103,20 @@ function setSound( state, sound ) {
 
 
 function setWord( state, word ) {
+  if (typeof word !== "string") {
+    debugger
+  }
   const { languageData } = state
   // { "б": { "бабочка": [ ... ]}}
   // OR
   // { "b": { "01-bee": [ ... ]}}
 
-  const [ sound ] = Object.entries(languageData).find(
+  const sounds = Object.entries(languageData)
+  // console.log("sounds:", sounds);
+  // console.log("sounds.find:", sounds.find);
+  // console.log("Array.isArray(sounds):", Array.isArray(sounds));
+
+  const [ sound ] = sounds.find(
     ([ key, value ]) => {
       const words = Object.keys(value)
       if (words.indexOf(word) < 0) {
@@ -122,7 +137,12 @@ function setWord( state, word ) {
 const showNext = (state) => {
   let { words, word } = state
   const index = (words.indexOf(word) + 1) % words.length
+
+  // Special case: skip the demo. It's not a word to practise.
   word = words[index]
+  if (word === "__demo__") {
+    word = words[index + 1] || words[0]
+  }
 
   return setWord(state, word)
 }

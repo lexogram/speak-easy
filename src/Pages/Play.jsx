@@ -23,6 +23,7 @@ const NEXT_DELAY = 100
 export const Play = () => {
   const {
     ready,
+    sound,
     files,
     startRecording,
     stopRecording,
@@ -132,6 +133,7 @@ export const Play = () => {
     <div
       id="play"
     >
+      <h1>{sound}</h1>
       { image && <img src={image} alt={cue} /> }
       <audio
         src={audio}
@@ -144,10 +146,10 @@ export const Play = () => {
         width="320"
         ref={videoRef}
         onEnded={beginRecording}
-      >
-       <source
-        src={video}
-        type={type}
+        >
+        <source
+          src={video}
+          type={type}
         />
       </video>
       <p>

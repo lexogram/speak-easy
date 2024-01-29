@@ -1,0 +1,16 @@
+#choose {
+  & {
+    display: flex;
+    flex-wrap: wrap;
+    --size: 12vmin;
+    --font-size: calc(var(--size) * 0.7);
+    justify-content: space-around;
+  }
+  button {
+    width: var(--size);
+    height: var(--size);
+    font-size: var(--font-size);
+    margin: 1rem;
+    padding: 0;
+  }
+}

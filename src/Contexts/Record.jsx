@@ -4,7 +4,7 @@
 
 export const getRecorder = async(callback, audio) => {
   if (navigator.mediaDevices.getUserMedia) {
-    console.log("The mediaDevices.getUserMedia() method is supported.");
+    // console.log("The mediaDevices.getUserMedia() method is supported.");
 
     const constraints = { audio: true };
     let chunks = [];

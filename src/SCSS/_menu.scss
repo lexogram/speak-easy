@@ -1,0 +1,13 @@
+#menu {
+  & {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 8rem;
+    height: 100vh;
+    border-right: 1px solid #000;
+    background-color: #0003;
+    box-shadow: 10px 10px 10px #0008;
+    pointer-events: none;
+  }
+}

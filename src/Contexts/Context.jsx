@@ -22,11 +22,18 @@ export const Provider = ({ children }) => {
   const startRef = useRef()
   const stopRef = useRef()
   const playRef = useRef()
+
+  const [ page, setPage ] = useState("Welcome")
+  
   const [ step, setStep ] = useState()
+
   const [state, dispatch] = useReducer(reducer, initialState)
   const {
     ready,
+    language,
+    sounds,
     sound,
+    demo,
     words,
     word,
     files
@@ -116,7 +123,10 @@ export const Provider = ({ children }) => {
         stopRecording,
         playback,
 
+        language,
+        sounds,
         sound,
+        demo,
         words,
         word,
         files,
@@ -127,7 +137,10 @@ export const Provider = ({ children }) => {
         showNext,
 
         step,
-        setStep
+        setStep,
+
+        page,
+        setPage
       }}
     >
       {children}

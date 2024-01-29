@@ -3,7 +3,7 @@
  */
 
 
-import phrasesData from '../data/index.json'
+import phrasesData from '../assets/index.json'
 const TYPE_REGEX = /(.*\.txt)|(.*\.mp3)|(.*\.m(?:p[g4])|(?:4v))|(.*\.((png)|(jpe?g)|(gif)))/i
 
 const TEXT_REGEX = /^.*\.txt$/i
@@ -40,7 +40,9 @@ export const fetchData = async (callback) => {
     let files = wordData[folder]
 
     if (Array.isArray(files)) {
-      // Not the second call made by StrictMode
+      // Not the second call made by StrictMode, by which time
+      // files will have become an object with the format:
+      // { audio, video, image, text }
       wordData[folder] = files.reduce(( fileMap, fileName ) => {
         const match = TYPE_REGEX.exec(fileName)
         const [,txt,audio,video,image] = match
