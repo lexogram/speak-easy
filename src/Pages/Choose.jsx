@@ -11,6 +11,7 @@ export const Choose = ({ setPage }) => {
   const { sounds, sound, setSound } = useContext(Context)
 
   const playSound = ({ target }) => {
+    // TODO: play sound on mouseEnter
     const sound = target.className  
   }
 
@@ -25,8 +26,18 @@ export const Choose = ({ setPage }) => {
   }
 
   const soundButtons = sounds.map( symbol => {
-    const className = `${symbol}${symbol === sound ? " current-sound" : ""}`
+    const className = `${symbol}${
+      symbol === sound ? " current-sound" : ""
+    }`
     const disabled = ["b", "ch", "d"].indexOf(symbol) < 0
+
+    if (symbol.length > 1 && symbol !== "kc") {
+      symbol = symbol[0].toUpperCase()
+             + symbol.slice(1).toLowerCase()
+    } else {
+      symbol = symbol.toUpperCase()
+    }
+
     return (
       <button
         key={symbol}

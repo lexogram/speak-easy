@@ -62,6 +62,7 @@ export const Demo = () => {
         key={video} // forces video to update
         width="320"
         ref={videoRef}
+        onEnded={() => togglePlay(false)}
       >
         <source
           src={video}
@@ -71,7 +72,6 @@ export const Demo = () => {
       <button
         className={className}
         onClick={togglePlay}
-        onEnded={() => togglePlay(false)}
       >
         {buttonText}
       </button>
