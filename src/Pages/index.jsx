@@ -24,14 +24,14 @@ const pages = {
 
 
 export const Pages = () => {
-  const { page, setPage } = useContext(Context)
+  const { page, setPage, sound } = useContext(Context)  
 
   const Page = pages[page]
 
   return (
     <>
       <Page setPage={setPage}/>
-      <Menu/>
+      {sound && <Menu/>}
     </>
   )
 }
