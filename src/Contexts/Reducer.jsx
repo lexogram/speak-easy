@@ -93,7 +93,7 @@ function setSound( state, sound ) {
   const { languageData } = state
   const soundData = languageData[sound]
 
-  state.demo = soundData.__demo__
+  state.demo = soundData["--demo--"]
 
   const word = Object.keys(soundData)[0]
 
@@ -140,7 +140,7 @@ const showNext = (state) => {
 
   // Special case: skip the demo. It's not a word to practise.
   word = words[index]
-  if (word === "__demo__") {
+  if (word === "--demo--") {
     word = words[index + 1] || words[0]
   }
 
