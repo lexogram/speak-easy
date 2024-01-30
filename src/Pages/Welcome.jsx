@@ -15,6 +15,11 @@ export const Welcome = ({ setPage }) => {
       <img src={logo} alt="logo" />
        <h1>Speech Sounds on Cue</h1>
        <button 
+        onClick={() => setPage("Settings")}
+       >
+        Settings
+       </button>
+       <button 
         onClick={() => setPage("Choose")}
        >
         Start

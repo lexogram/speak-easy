@@ -4,7 +4,7 @@
 
 
 import React, { useContext } from 'react'
-import { Context } from '../../Contexts/Context'
+import { Context } from '../../../Contexts/Context'
 import { ToggleAuto } from './ToggleAuto'
 import { Button } from './Button'
 import { RecordButton } from './RecordButton'

@@ -9,8 +9,8 @@ import React, {
   useState,
   useEffect,
 } from 'react'
-import { Context } from '../Contexts/Context'
-import { Buttons } from '../Components/Buttons'
+import { Context } from '../../Contexts/Context'
+import { Buttons } from './Buttons'
 
 
 const CUE_REGEX = /(.*)\|\s*([^.!?]*)([.!?])?/
