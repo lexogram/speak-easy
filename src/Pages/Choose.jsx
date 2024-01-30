@@ -29,7 +29,6 @@ export const Choose = ({ setPage }) => {
     const className = `${symbol}${
       symbol === sound ? " current-sound" : ""
     }`
-    const disabled = ["b", "ch", "d"].indexOf(symbol) < 0
 
     if (symbol.length > 1 && symbol !== "kc") {
       symbol = symbol[0].toUpperCase()
@@ -44,7 +43,6 @@ export const Choose = ({ setPage }) => {
         className={className}
         onMouseEnter={playSound}
         onClick={chooseSound}
-        disabled={disabled}
       >
         {symbol}
       </button>
