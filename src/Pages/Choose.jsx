@@ -7,8 +7,13 @@ import React, { useContext } from 'react'
 import { Context } from '../Contexts/Context'
 
 
-export const Choose = ({ setPage }) => {
-  const { sounds, sound, setSound } = useContext(Context)
+export const Choose = ({ goToPage }) => {
+  const {
+    sounds,
+    sound,
+    setSound,
+    menuIsOpen
+  } = useContext(Context)
 
   const playSound = ({ target }) => {
     // TODO: play sound on mouseEnter
@@ -22,7 +27,7 @@ export const Choose = ({ setPage }) => {
     } else {
       setSound(sound)
     }
-    setPage("Demo")
+    goToPage("Demo")
   }
 
   const soundButtons = sounds.map( symbol => {
@@ -51,7 +56,10 @@ export const Choose = ({ setPage }) => {
 
 
   return (
-    <div id="choose">
+    <div
+      id="choose"
+      className={menuIsOpen ? "menu-open" : ""}
+    >
       {soundButtons}
     </div>
 

@@ -15,7 +15,7 @@ import { Context } from '../Contexts/Context'
 
 export const Demo = () => {
   const [ playing, setPlaying ] = useState(false)
-  const { demo, setPage } = useContext(Context)
+  const { demo, goToPage } = useContext(Context)
   const { video, text } = demo
   const videoRef = useRef()
 
@@ -29,7 +29,7 @@ export const Demo = () => {
 
   const startExercise = () => {
     videoRef.current.pause()
-    setPage("Play")
+    goToPage("Play")
   }
 
 

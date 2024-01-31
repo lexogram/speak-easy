@@ -1,13 +1,40 @@
 #menu {
+  --ratio: 0.5;
+  --icon-size: calc(var(--ratio) * var(--menu-width));
+
   & {
     position: fixed;
     top: 0;
     left: 0;
-    width: 8rem;
+    width: var(--menu-width);
     height: 100vh;
     border-right: 1px solid #000;
-    background-color: #0003;
+    background-color: var(--darkly);
     box-shadow: 10px 10px 10px #0008;
     pointer-events: none;
+    z-index: 99;
+
+    transition: left .4s linear;
+  }
+
+  #icon {
+    position: fixed;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    stroke: #fff;
+    // opacity set in Icon.jsx
+    top: 0;
+    transition-property: left, opacity;
+    transition-duration: .3s, .1s;
+    transition-timing-function: linear, ease;
+    z-index: 99;
+    pointer-events: all;
+  }
+
+  .items {
+    position: relative;
+    top: var(--icon-size);
+    height: calc(100vh - var(--icon-size));
+    overflow-y: auto;
   }
 }

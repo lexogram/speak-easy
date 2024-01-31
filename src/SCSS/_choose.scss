@@ -13,4 +13,14 @@
     margin: 1rem;
     padding: 0;
   }
+
+  @media (min-width: 600px) {
+    &.menu-open {
+      position: absolute;
+      left: var(--menu-width);
+      width: var(--content-width);
+      top: 50%;
+      transform: translateY(-50%)
+    }
+  }
 }

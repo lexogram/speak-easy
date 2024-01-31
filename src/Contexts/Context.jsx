@@ -24,8 +24,11 @@ export const Provider = ({ children }) => {
   const playRef = useRef()
 
   const [ page, setPage ] = useState("Welcome")
-  
   const [ step, setStep ] = useState()
+  const [ menuIsOpen, setMenuIsOpen ] = useState(false)
+  const [ menuShown, setMenuShown ] = useState(false)
+
+
 
   const [state, dispatch] = useReducer(reducer, initialState)
   const {
@@ -110,6 +113,15 @@ export const Provider = ({ children }) => {
   }
 
 
+  const goToPage = page => {
+    setPage(page)
+
+    if ((page === "Play" || page === "Demo") && !menuShown) {
+      setMenuShown(true)
+    }
+  }
+
+
   useEffect(() => { fetchData(initializeReducer) }, [])
   useEffect(() => { getRecorder(recorderCallback, new Audio()) }, [])
 
@@ -140,7 +152,10 @@ export const Provider = ({ children }) => {
         setStep,
 
         page,
-        setPage
+        goToPage,
+        menuShown,
+        menuIsOpen,
+        setMenuIsOpen
       }}
     >
       {children}

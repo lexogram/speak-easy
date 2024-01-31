@@ -20,13 +20,13 @@ export const Button = ({
 
 
   const c = {
-    bg:  "#222",
+    bg:  "var(--dark)",
     bgh: "#171",
     bgd: "#040",
     bd:  "#666",
     bdd: "#171",
     bdh: "#393",
-    c:   "#ddd",
+    c:   "var(--light)",
     cd:  "#fff",
     ...colours
   }

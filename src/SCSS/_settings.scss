@@ -1,0 +1,26 @@
+#settings {
+
+  .slider {
+    --size: 1.5rem;
+    --range-scale: 10;
+    --thumb-scale: 2;
+
+    .range,
+    .thumb {
+      height: var(--size);
+      border: 1px solid #ddd;
+      border-radius: 100vmax;
+    }
+
+    .range {
+      width: calc(var(--range-scale) * var(--size));
+    }
+
+    .thumb {
+      width: calc(var(--thumb-scale) * var(--size));
+      box-sizing: border-box;
+      background-color: var(--light);
+      border-color: #222;
+    }
+  }
+}
