@@ -20,14 +20,17 @@
 
 
 import React, { useState } from 'react'
-import { Slider } from './Widgets/Slider'
+import { SelectSlider } from './Widgets/SelectSlider'
 
 
-const MIN_CUE_DELAY = 0
 const DEFAULT_CUE_DELAY = 500
-const MAX_CUE_DELAY = 2000
-const CUE_STEPS = 5 // 0 500 1000 1500 2000
-
+const delayStrings = {
+  0:    "No delay",
+  500:  "Half a second",
+  1000: "One second",
+  1500: "One and a half seconds",
+  2000: "Two seconds"
+}
 
 export const Settings = (props) => {
   const [ cueDelay, setCueDelay ] = useState(DEFAULT_CUE_DELAY)
@@ -36,13 +39,10 @@ export const Settings = (props) => {
   return (
     <div id="settings">
       <h1>Settings</h1>
-      <Slider
-        min={MIN_CUE_DELAY}
-        max={MAX_CUE_DELAY}
+      <SelectSlider
+        stringMap={delayStrings}
         value={cueDelay}
-        precision={0}
-        steps={CUE_STEPS}
-        onDrag={setCueDelay}
+        action={setCueDelay}
       />
     </div>
   )

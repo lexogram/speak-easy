@@ -17,7 +17,6 @@ export const Welcome = ({ goToPage, ready }) => {
 
        <button
         onClick={() => goToPage("Settings")}
-        disabled
        >
         Settings
        </button>

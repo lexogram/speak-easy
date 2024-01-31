@@ -27,7 +27,7 @@ export const Menu = () => {
     { key: "Play", name: "Activity" },
     { key: "Demo", name: "Demo" },
     { key: "Choose", name: "Choose" },
-    { key: "Settings", name: "Settings", disabled: true }
+    { key: "Settings", name: "Settings" }
   ]
 
 
