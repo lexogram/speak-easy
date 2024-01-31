@@ -23,16 +23,15 @@ export const Provider = ({ children }) => {
   const stopRef = useRef()
   const playRef = useRef()
 
+  const [ ready, setReady ] = useState(false)
   const [ page, setPage ] = useState("Welcome")
   const [ step, setStep ] = useState()
   const [ menuIsOpen, setMenuIsOpen ] = useState(false)
   const [ menuShown, setMenuShown ] = useState(false)
 
 
-
   const [state, dispatch] = useReducer(reducer, initialState)
   const {
-    ready,
     language,
     sounds,
     sound,
@@ -41,6 +40,7 @@ export const Provider = ({ children }) => {
     word,
     files
   } = state
+
 
   const startRecording = startRef.current
   const stopRecording = stopRef.current
@@ -123,7 +123,12 @@ export const Provider = ({ children }) => {
 
 
   useEffect(() => { fetchData(initializeReducer) }, [])
-  useEffect(() => { getRecorder(recorderCallback, new Audio()) }, [])
+  useEffect(() => {
+    getRecorder(recorderCallback, new Audio())
+  }, [])
+  useEffect(() => {
+    setReady(!!sounds)
+  }, [sounds])
 
 
   return (

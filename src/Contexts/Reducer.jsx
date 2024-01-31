@@ -15,13 +15,10 @@ const TYPE_REGEX = /( \|)|(.*\.mp3)|(.*\.mp4)|(.*\.((png)|(jpe?g)|(gif)))/i
 
 
 
-const initialState = {
-  ready: false
-}
+const initialState = {}
 
 // Will become:
 // {
-//   ready: true,
 //   language: "ru"
 //   sounds: [ "Б", "В", "Г", ... ]
 //   sound: "Б",
@@ -65,7 +62,7 @@ const reducer = (state, action) => {
 function setData( state, payload ) {
   const { phrasesData } = payload
   const language = Object.keys(phrasesData)[1]
-  state = { phrasesData, ready: true }
+  state = { phrasesData }
 
   return setLanguage( state, language )
 }

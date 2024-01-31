@@ -24,13 +24,13 @@ const pages = {
 
 
 export const Pages = () => {
-  const { page, goToPage, sound } = useContext(Context)
+  const { page, goToPage, sound, ready } = useContext(Context)
 
   const Page = pages[page]
 
   return (
     <>
-      <Page goToPage={goToPage}/>
+      <Page goToPage={goToPage} ready={ready}/>
       {sound && <Menu/>}
     </>
   )
