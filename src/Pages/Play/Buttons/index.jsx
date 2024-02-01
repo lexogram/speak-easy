@@ -5,7 +5,6 @@
 
 import React, { useContext } from 'react'
 import { Context } from '../../../Contexts/Context'
-import { ToggleAuto } from './ToggleAuto'
 import { Button } from './Button'
 import { RecordButton } from './RecordButton'
 
@@ -44,10 +43,6 @@ export const Buttons = ({ listeners, auto }) => {
         name="Next"
         role="next"
         step={step}
-      />
-      <ToggleAuto
-        toggleAuto={listeners.toggleAuto}
-        auto={auto}
       />
     </div>
   )

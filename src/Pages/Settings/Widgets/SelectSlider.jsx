@@ -5,26 +5,34 @@
 
 import React, { useRef, useEffect, useState } from "react"
 
+
+
 export const SelectSlider = ({
+  title,
   stringMap,
   value,
-  action
+  action,
+  className
 }) => {
   const values = Object.keys(stringMap)
   const range = values.length - 1
   const rangeRef = useRef()
   const thumbRef = useRef()
-  const [ thumbLeft, setThumbLeft ] = useState(-100) // offscreen
+  const [ thumbStyle, setThumbStyle ] = useState({
+    position: "relative",
+    left: 0,
+    width: "2em"
+  }) // offscreen
 
 
-  const triggerAction = ({ type, target }) => {
+  const triggerAction = ({ target }) => {
     action(target.value)
   }
 
 
   const getStep = (ratio) => {
     if (ratio) {
-      return Math.floor(range * ratio)
+      return Math.floor(range * Math.max(0, Math.min(ratio, 1)))
     }
   
     return values.findIndex( number => number == value) 
@@ -38,49 +46,18 @@ export const SelectSlider = ({
     const rangeWidth = parseFloat(
       getComputedStyle(ranger).getPropertyValue("width")
     ) // excludes border and padding
-    const { width: thumbWidth } = thumb.getBoundingClientRect()
+    const width = rangeWidth / (range + 1)
 
-    // Find which fraction of the range width represents 100% of
-    // the thumb movement
-    const maxScroll = rangeWidth - thumbWidth
+    const maxScroll = rangeWidth - width
     const step = getStep(offsetX / maxScroll)
     const fraction = step / range
-    // setFraction(fraction)
 
-    const thumbLeft = fraction * maxScroll
-    setThumbLeft(thumbLeft)
+    const left = fraction * maxScroll
+    setThumbStyle({ ...thumbStyle, left, width })
 
     if ( offsetX !== undefined ) {
       action(values[step])
     }
-  }
-
-
-  const rangeStyle = {
-    textAlign: "left",
-  }
-
-
-  const thumbStyle = {
-    position: "relative",
-    left: `${thumbLeft}px`
-  }
-
-
-
-  const checkKey = event => {
-
-  }
-
-
-
-  /**
-   * Called when the user updates the number input directly
-   *
-   */
-  const updateValue = event => {
-    // setFraction(event.target.value)
-    // onDrag(id, fraction)
   }
 
 
@@ -97,8 +74,7 @@ export const SelectSlider = ({
 
 
     function drag(event) {
-      const offsetX = event.clientX - left
-      placeThumb(offsetX)
+      placeThumb(event.clientX - left)
     }
 
 
@@ -120,29 +96,33 @@ export const SelectSlider = ({
     ))
 
 
+  className = `select-slider ${className ? className : ""}`
+
+
   useEffect(placeThumb, [value])
 
 
   return (
-    <div className="select-slider">
-      <select
-        value={value}
-        onChange={triggerAction}
-      >
-        {options}
-      </select>
-
-      <div
-        className="range"
-        style={rangeStyle}
-        onMouseDown={startDrag}
-        ref={rangeRef}
-      >
+    <div className={className}>
+      <span>{title}</span>
+      <div className="value">
         <div
-          className="thumb"
-          style={thumbStyle}
-          ref={thumbRef}
-        ></div>
+          className="range"
+          onMouseDown={startDrag}
+          ref={rangeRef}
+        >
+          <div
+            className="thumb"
+            style={thumbStyle}
+            ref={thumbRef}
+          ></div>
+        </div>
+        <select
+          value={value}
+          onChange={triggerAction}
+        >
+          {options}
+        </select>
       </div>
     </div>
   )

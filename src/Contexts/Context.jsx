@@ -14,6 +14,47 @@ import { reducer, initialState } from './Reducer'
 import { fetchData } from './FetchData'
 import { getRecorder } from './Record'
 
+const DEFAULT_CUE_DELAY = 500
+const delayStrings = {
+  0:    "0 s",
+  500:  "0.5 s",
+  1000: "1 s",
+  1500: "1.5 s",
+  2000: "2 s"
+}
+
+const DEFAULT_DURATION = 2500
+const durationStrings = {
+  2000: "2 s",
+  2500: "2.5 s",
+  3000: "3 s",
+  4000: "4 s",
+  5000: "5 s"
+}
+
+const DEFAULT_PAUSE = 1000
+const pauseStrings = {
+  500:  "0.5 s",
+  1000: "1 s",
+  2000: "2 s",
+  3000: "3 s",
+  "click": "Press Next button"
+}
+
+const settingTitles = {
+  "auto-run":        "Run activity automatically?",
+  "delay":           "Delay between audio prompt and video cue",
+  "duration":        "Recording duration",
+  "pause":           "Pause before playing next sound",
+  "show-video":      "Show video as audio prompt plays?",
+  "silent-video":    "Show silent video while recording?",
+  "no-scanning":     "Standard buttons",
+  "switch-scanning": "Switch scanning",
+  "one-touch":       "One-Touch scanning"
+}
+
+
+
 export const Context = createContext()
 
 
@@ -28,6 +69,16 @@ export const Provider = ({ children }) => {
   const [ step, setStep ] = useState()
   const [ menuIsOpen, setMenuIsOpen ] = useState(false)
   const [ menuShown, setMenuShown ] = useState(false)
+
+  const [ autoRun, setAutoRun ] = useState(true)
+  const [ cueDelay, setCueDelay ] = useState(DEFAULT_CUE_DELAY)
+  const [ duration, setDuration ] = useState(DEFAULT_DURATION)
+  const [ pause, setPause ] = useState(DEFAULT_PAUSE)
+
+  const [ showVideo, setShowVideo ] = useState(false)
+  const [ silentVideo, setSilentVideo ] = useState(false)
+  const [ scanning, setScanning ] = useState("none")
+
 
 
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -160,7 +211,28 @@ export const Provider = ({ children }) => {
         goToPage,
         menuShown,
         menuIsOpen,
-        setMenuIsOpen
+        setMenuIsOpen,
+
+        autoRun,
+        cueDelay,
+        duration,
+        pause,
+        showVideo,
+        silentVideo,
+        delayStrings,
+        durationStrings,
+        pauseStrings,
+        settingTitles,
+
+        setAutoRun,
+        setCueDelay,
+        setDuration,
+        setPause,
+        setShowVideo,
+        setSilentVideo,
+
+        scanning,
+        setScanning
       }}
     >
       {children}

@@ -6,7 +6,6 @@
 import React, {
   useContext,
   useRef,
-  useState,
   useEffect,
 } from 'react'
 import { Context } from '../../Contexts/Context'
@@ -14,32 +13,29 @@ import { Buttons } from './Buttons'
 
 
 const CUE_REGEX = /(.*)\|\s*([^.!?]*)([.!?])?/
-const CUE_DELAY = 1000
-const RECORD_DURATION = 2000
-const MAX_RECORD_DURATION = 5000
-const NEXT_DELAY = 100
 
 
 export const Play = () => {
   const {
-    ready,
     sound,
     files,
     startRecording,
     stopRecording,
     showNext,
-    step,
-    setStep
+    setStep,
+    autoRun,
+    cueDelay,
+    duration,
+    pause,
+    showVideo,
+    silentVideo,
   } = useContext(Context)
 
   const audioRef = useRef()
   const videoRef = useRef()
-  const [ auto, setAuto ] = useState(false)
 
 
-  // If `ready` is not true yet, then there will be no files...
   const { text, audio, video, image } = (files || {})
-  // ... so we just need to pretend
   const [ , prompt, cue, mark ] = text
     ? CUE_REGEX.exec(text)
     : []
@@ -52,7 +48,7 @@ export const Play = () => {
 
 
   const prepareVideo = () => {
-    setTimeout(startVideo, CUE_DELAY)
+    setTimeout(startVideo, cueDelay)
   }
 
 
@@ -61,18 +57,8 @@ export const Play = () => {
   }
 
 
-  const setRecordingDuration = () => {
-    const duration = auto ? RECORD_DURATION : MAX_RECORD_DURATION
-    document.documentElement.style.setProperty(
-      "--record-duration", duration + "ms"
-    )
-    return duration
-  }
-
-
   const beginRecording = ({ type }) => {
-    if (auto || type === "click") {
-      const duration = setRecordingDuration()
+    if (autoRun || type === "click") {
       setTimeout(endRecording, duration)
     
       setStep("record")
@@ -87,8 +73,8 @@ export const Play = () => {
 
   const endRecording = () => {
     stopRecording()
-    if (auto) {
-      setTimeout(showNext, RECORD_DURATION + NEXT_DELAY)
+    if (autoRun) {
+      setTimeout(showNext, duration + pause)
       setStep("listen")
 
     } else {
@@ -97,13 +83,8 @@ export const Play = () => {
   }
 
 
-  const toggleAuto = () => {
-    setAuto(!auto)
-  }
-
-
   const doAutoRun = () => {
-    if (ready && auto) {
+    if (autoRun) {
       playPrompt()
     }
   }
@@ -113,11 +94,6 @@ export const Play = () => {
 
 
 
-  if (!ready) {
-    return "Connecting..."
-  }
-
-
   const type = video.match(/\.mpg$/i) ? "video/mpeg" : "video/mp4"
 
   const listeners = {
@@ -125,7 +101,6 @@ export const Play = () => {
     endRecording,
     showNext,
     playPrompt,
-    toggleAuto
   }
 
 
@@ -160,7 +135,6 @@ export const Play = () => {
 
       <Buttons
         listeners={listeners}
-        auto={auto}
       />
     </div>
   )

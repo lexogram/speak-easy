@@ -1,10 +1,10 @@
 /**
  * src/Pages/Settings/index.jsx
  *
- * 1. Cue delay
- * 2. Record duration
- * 3. Rapid press duration
- * 4. Show silent video during recording
+ * -[x] Auto-run
+ * -[x] Cue delay
+ * -[x] Record duration
+ * -[x] Show silent video during recording
  *
  * ## Switch scanning
  *
@@ -19,31 +19,116 @@
  */
 
 
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
+import { Context } from '../../Contexts/Context'
+
 import { SelectSlider } from './Widgets/SelectSlider'
+import { Checkbox } from './Widgets/Checkbox'
 
 
-const DEFAULT_CUE_DELAY = 500
-const delayStrings = {
-  0:    "No delay",
-  500:  "Half a second",
-  1000: "One second",
-  1500: "One and a half seconds",
-  2000: "Two seconds"
-}
+
 
 export const Settings = (props) => {
-  const [ cueDelay, setCueDelay ] = useState(DEFAULT_CUE_DELAY)
-
+  const {
+    autoRun,
+    setAutoRun,
+    cueDelay,
+    setCueDelay,
+    duration,
+    setDuration,
+    pause,
+    setPause,
+    showVideo,
+    setShowVideo,
+    silentVideo,
+    setSilentVideo,
+    delayStrings,
+    durationStrings,
+    pauseStrings,
+    settingTitles,
+    scanning,
+    setScanning
+  } = useContext(Context)
+  
 
   return (
     <div id="settings">
-      <h1>Settings</h1>
+      <h1>Settings: recording</h1>
+      <hr />
+      <Checkbox
+        id="auto-run"
+        title={settingTitles["auto-run"]}
+        checked={autoRun}
+        action={() => setAutoRun(!autoRun)}
+      />
       <SelectSlider
+        title={settingTitles["pause"]}
+        className="pause"
+        stringMap={pauseStrings}
+        value={pause}
+        action={setPause}
+      />
+      <SelectSlider
+        title={settingTitles["delay"]}
         stringMap={delayStrings}
         value={cueDelay}
         action={setCueDelay}
       />
-    </div>
+      <SelectSlider
+        title={settingTitles["duration"]}
+        stringMap={durationStrings}
+        value={duration}
+        action={setDuration}
+      />
+      <Checkbox
+        id="show-video"
+        title={settingTitles["show-video"]}
+        checked={showVideo}
+        action={() => setShowVideo(!showVideo)}
+      />
+      <Checkbox
+        id="silent-video"
+        title={settingTitles["silent-video"]}
+        checked={silentVideo}
+        action={() => setSilentVideo(!silentVideo)}
+      />
+      <div className="scanning">
+        <h1>Settings: scanning</h1>
+        <hr />
+        <label htmlFor="no-scanning">
+          <input
+            type="radio"
+            name="scanning"
+            id="no-scanning"
+            disabled
+            checked={scanning === "none"}
+            onChange={() => setScanning("none")}
+          />
+          <span>{settingTitles["no-scanning"]}</span>
+        </label>
+        <label htmlFor="switch-scanning">
+          <input
+            type="radio"
+            name="scanning"
+            id="switch-scanning"
+            disabled
+            checked={scanning === "switch"}
+            onChange={() => setScanning("switch")}
+          />
+          <span>{settingTitles["switch-scanning"]}</span>
+        </label>
+        <label htmlFor="one-touch">
+          <input
+            type="radio"
+            name="scanning"
+            id="one-touch"
+            disabled
+            checked={scanning === "one-touch"}
+            onChange={() => setScanning("one-touch")}
+          />
+          <span>{settingTitles["one-touch"]}</span>
+        </label>
+            </div>
+      </div>
   )
 }
