@@ -17,15 +17,16 @@ export const Menu = () => {
     page,
     goToPage,
     setMenuIsOpen,
-    menuShown
+    menuShown,
+    sound
   } = useContext(Context)
   const [ open, setOpen ] = useState(true)
 
 
 
   const pageMap = [
-    { key: "Play", name: "Activity" },
-    { key: "Demo", name: "Demo" },
+    { key: "Play", name: "Activity", disabled: !sound},
+    { key: "Demo", name: "Demo", disabled: !sound },
     { key: "Choose", name: "Choose" },
     { key: "Settings", name: "Settings" }
   ]

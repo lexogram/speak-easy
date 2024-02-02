@@ -31,7 +31,7 @@ export const Pages = () => {
   return (
     <>
       <Page goToPage={goToPage} ready={ready}/>
-      {sound && <Menu/>}
+      <Menu/>
     </>
   )
 }

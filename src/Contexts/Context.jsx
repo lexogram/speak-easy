@@ -167,7 +167,7 @@ export const Provider = ({ children }) => {
   const goToPage = page => {
     setPage(page)
 
-    if ((page === "Play" || page === "Demo") && !menuShown) {
+    if (!menuShown) {
       setMenuShown(true)
     }
   }
