@@ -11,8 +11,10 @@ import React, {
   useRef
 } from 'react'
 import { reducer, initialState } from './Reducer'
+import storage from './Storage'
 import { fetchData } from './FetchData'
 import { getRecorder } from './Record'
+
 
 const DEFAULT_CUE_DELAY = 500
 const delayStrings = {
@@ -60,6 +62,7 @@ export const Context = createContext()
 
 
 export const Provider = ({ children }) => {
+
   const startRef = useRef()
   const stopRef = useRef()
   const playRef = useRef()
@@ -70,14 +73,29 @@ export const Provider = ({ children }) => {
   const [ menuIsOpen, setMenuIsOpen ] = useState(false)
   const [ menuShown, setMenuShown ] = useState(false)
 
-  const [ autoRun, setAutoRun ] = useState(true)
-  const [ cueDelay, setCueDelay ] = useState(DEFAULT_CUE_DELAY)
-  const [ duration, setDuration ] = useState(DEFAULT_DURATION)
-  const [ pause, setPause ] = useState(DEFAULT_PAUSE)
-
-  const [ showVideo, setShowVideo ] = useState(false)
-  const [ silentVideo, setSilentVideo ] = useState(false)
-  const [ scanning, setScanning ] = useState("none")
+  const [ autoRun, setAutoRun ] = useState(
+    storage.getItem("autoRun") === undefined
+    ? true
+    : storage.getItem("autoRun")
+  )
+  const [ cueDelay, setCueDelay ] = useState(
+    storage.getItem("cueDelay") || DEFAULT_CUE_DELAY
+  )
+  const [ duration, setDuration ] = useState(
+    storage.getItem("duration") || DEFAULT_DURATION
+  )
+  const [ pause, setPause ] = useState(
+    storage.getItem("pause") || DEFAULT_PAUSE
+  )
+  const [ showVideo, setShowVideo ] = useState(
+    storage.getItem("showVideo") || false
+  )
+  const [ silentVideo, setSilentVideo ] = useState(
+    storage.getItem("silentVideo") || false
+  )
+  const [ scanning, setScanning ] = useState(
+    storage.getItem("scanning") || "none"
+  )
 
 
 
@@ -172,6 +190,47 @@ export const Provider = ({ children }) => {
     }
   }
 
+  const interceptLanguage = value => {
+    setLanguage(value)
+    storage.setItem("language", value) 
+  }
+  const interceptSound = value => {
+    setSound(value)
+    storage.setItem("sound", value)
+  }
+  const interceptWord = value => {
+    setWord(value)
+    storage.setItem("word", value)
+  }
+  const interceptAutoRun = value => {
+    setAutoRun(value)
+    storage.setItem("autoRun", value)
+  }
+  const interceptCueDelay = value => {
+    setCueDelay(value)
+    storage.setItem("cueDelay", value)
+  }
+  const interceptDuration = value => {
+    setDuration(value)
+    storage.setItem("duration", value)
+  }
+  const interceptPause = value => {
+    setPause(value)
+    storage.setItem("pause", value)
+  }
+  const interceptShowVideo = value => {
+    setShowVideo(value)
+    storage.setItem("showVideo", value)
+  }
+  const interceptSilentVideo = value => {
+    setSilentVideo(value)
+    storage.setItem("silentVideo", value)
+  }
+  const interceptScanning = value => {
+    setScanning(value)
+    storage.setItem("scanning", value)
+  }
+
 
   useEffect(() => { fetchData(initializeReducer) }, [])
   useEffect(() => {
@@ -199,9 +258,9 @@ export const Provider = ({ children }) => {
         word,
         files,
 
-        setLanguage,
-        setSound,
-        setWord,
+        setLanguage: interceptLanguage,
+        setSound:    interceptSound,
+        setWord:     interceptWord,
         showNext,
 
         step,
@@ -223,16 +282,15 @@ export const Provider = ({ children }) => {
         durationStrings,
         pauseStrings,
         settingTitles,
-
-        setAutoRun,
-        setCueDelay,
-        setDuration,
-        setPause,
-        setShowVideo,
-        setSilentVideo,
-
         scanning,
-        setScanning
+
+        setAutoRun:     interceptAutoRun,
+        setCueDelay:    interceptCueDelay,
+        setDuration:    interceptDuration,
+        setPause:       interceptPause,
+        setShowVideo:   interceptShowVideo,
+        setSilentVideo: interceptSilentVideo,
+        setScanning:    interceptScanning,
       }}
     >
       {children}
