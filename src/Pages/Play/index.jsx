@@ -29,7 +29,12 @@ export const Play = () => {
     pause,
     showVideo,
     silentVideo,
+    goToPage
   } = useContext(Context)
+
+  if (!sound) {
+    return goToPage("Choose")
+  }
 
   const audioRef = useRef()
   const videoRef = useRef()

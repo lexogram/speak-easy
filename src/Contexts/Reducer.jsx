@@ -75,11 +75,6 @@ function setLanguage( state, language ) {
   const sounds = Object.keys(languageData)
   state = { ...state, language, languageData, sounds }
 
-  // // Choose the first word of the first sound in this language
-  // const wordData = Object.values(languageData)[0]
-  // const word = Object.keys(wordData)[0]
-
-  // return setWord(state, word)
   return { ...state }
 }
 
@@ -101,8 +96,10 @@ function setSound( state, sound ) {
 
 function setWord( state, word ) {
   if (typeof word !== "string") {
-    debugger
+    // Force Play to go to the Choose page
+    return { ...state, sound: undefined }
   }
+
   const { languageData } = state
   // { "б": { "бабочка": [ ... ]}}
   // OR
@@ -133,15 +130,15 @@ function setWord( state, word ) {
 
 const showNext = (state) => {
   let { words, word } = state
-  const index = (words.indexOf(word) + 1) % words.length
+  const index = (words.indexOf(word) + 1)
 
   // Special case: skip the demo. It's not a word to practise.
   word = words[index]
   if (word === "--demo--") {
-    word = words[index + 1] || words[0]
+    word = words[index + 1]
   }
 
-  return setWord(state, word)
+  return setWord(state, word) // may be undefined
 }
 
 
