@@ -52,6 +52,7 @@ const settingTitles = {
   "duration":        "Recording duration",
   "pause":           "Pause before playing next sound",
   "show-video":      "Show video as audio prompt plays?",
+  "replay-prompt":   "Replay audio before recording?",
   "silent-video":    "Show silent video while recording?",
   "no-scanning":     "Standard buttons",
   "switch-scanning": "Switch scanning",
@@ -96,6 +97,9 @@ export const Provider = ({ children }) => {
   )
   const [ showVideo, setShowVideo ] = useState(
     storage.getItem("showVideo") || false
+  )
+  const [ replayPrompt, setReplayPrompt ] = useState(
+    storage.getItem("replayPrompt") || false
   )
   const [ silentVideo, setSilentVideo ] = useState(
     storage.getItem("silentVideo") || false
@@ -229,6 +233,10 @@ export const Provider = ({ children }) => {
     setShowVideo(value)
     storage.setItem("showVideo", value)
   }
+  const interceptReplayPrompt = value => {
+    setReplayPrompt(value)
+    storage.setItem("replayPrompt", value)
+  }
   const interceptSilentVideo = value => {
     setSilentVideo(value)
     storage.setItem("silentVideo", value)
@@ -283,6 +291,7 @@ export const Provider = ({ children }) => {
         duration,
         pause,
         showVideo,
+        replayPrompt,
         silentVideo,
         delayStrings,
         durationStrings,
@@ -290,13 +299,14 @@ export const Provider = ({ children }) => {
         settingTitles,
         scanning,
 
-        setAutoRun:     interceptAutoRun,
-        setCueDelay:    interceptCueDelay,
-        setDuration:    interceptDuration,
-        setPause:       interceptPause,
-        setShowVideo:   interceptShowVideo,
-        setSilentVideo: interceptSilentVideo,
-        setScanning:    interceptScanning,
+        setAutoRun:      interceptAutoRun,
+        setCueDelay:     interceptCueDelay,
+        setDuration:     interceptDuration,
+        setPause:        interceptPause,
+        setShowVideo:    interceptShowVideo,
+        setReplayPrompt: interceptReplayPrompt,
+        setSilentVideo:  interceptSilentVideo,
+        setScanning:     interceptScanning,
       }}
     >
       {children}

@@ -6,72 +6,81 @@
     text-shadow: 2px 2px 4px black;
     text-transform: uppercase;
   }
-}
 
-#play img {
-  width: var(--size);
-  height: var(--size);
-  object-fit: contain;
-  background-color: #fff;
-}
-
-#language {
-  position: fixed;
-  top: 0;
-  width: var(--size);
-  display: flex;
-  justify-content: stretch;
-}
-
-#language * {
-  flex-grow: 1;
-}
-
-#buttons {
-  --width: 20%;
-  --height: 3rem;
-  --radius: 0.5rem;
-
-  button,
-  .record-button {
-    display: inline-block;
-    position: relative; /* for .frame and .progress */
-    width: var(--width);
+  img {
+    width: var(--size);
+    height: var(--size);
+    object-fit: contain;
+    background-color: #fff;
   }
 
-  button,
-  .record-button,
-  .record-button div  {
-    height: var(--height);
-    border-radius: var(--radius);
-    padding: 0;
-    margin: 0;
+  div.video {
+    border: 1px inset var(--disabled);
   }
 
-  .record-button div {
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
+  video {
+    vertical-align: top;
+    visibility: hidden;
   }
 
-  .record-button button,
-  .record-button .frame {
-    width: 100%;
+  span.cue {
+    font-weight: bold;
   }
 
-  div.progress {
-    width: 0;
-    background-color: #f003;
+  span.gold {
+    color: gold;
   }
 
-  div.progress.recording {
-    width: 100%;
-    transition: width var(--record-duration);
-    transition-timing-function: linear; /* after override ease */
+  div.video.visible video {
+    visibility: visible;
   }
 
-  label {
-    display: block;
+  #buttons {
+    --width: 20%;
+    --height: 3rem;
+    --radius: 0.5rem;
+
+    button,
+    .record-button {
+      display: inline-block;
+      position: relative; /* for .frame and .progress */
+      width: var(--width);
+    }
+
+    button,
+    .record-button,
+    .record-button div  {
+      height: var(--height);
+      border-radius: var(--radius);
+      padding: 0;
+      margin: 0;
+    }
+
+    .record-button div {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+
+    .record-button button,
+    .record-button .frame {
+      width: 100%;
+    }
+
+    div.progress {
+      width: 0;
+      background-color: #f003;
+    }
+
+    div.progress.recording {
+      width: 100%;
+      transition: width var(--record-duration);
+      transition-timing-function: linear; /* after override ease */
+    }
+
+    label {
+      display: block;
+    }
   }
 }

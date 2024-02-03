@@ -36,6 +36,8 @@ export const Settings = (props) => {
     setPause,
     showVideo,
     setShowVideo,
+    replayPrompt,
+    setReplayPrompt,
     silentVideo,
     setSilentVideo,
     delayStrings,
@@ -82,6 +84,12 @@ export const Settings = (props) => {
           title={settingTitles["show-video"]}
           checked={showVideo}
           action={() => setShowVideo(!showVideo)}
+        />
+        <Checkbox
+          id="replay-prompt"
+          title={settingTitles["replay-prompt"]}
+          checked={replayPrompt}
+          action={() => setReplayPrompt(!replayPrompt)}
         />
         <Checkbox
           id="silent-video"

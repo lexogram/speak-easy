@@ -25,6 +25,7 @@ export const Play = () => {
     startRecording,
     stopRecording,
     showNext,
+    step,
     setStep,
     autoRun,
     cueDelay,
@@ -54,6 +55,7 @@ export const Play = () => {
 
 
   const prepareVideo = () => {
+    setStep("video")
     timeOut = setTimeout(startVideo, cueDelay)
   }
 
@@ -141,6 +143,16 @@ export const Play = () => {
   }
 
 
+  const videoClass = step === "video"
+                  || (step === "play" && showVideo)
+                  || (step === "record" && silentVideo)
+    ? "video visible"
+    : "video"
+  const cueClass = step === "video"
+    ? "cue gold"
+    : "cue"
+
+
   return (
     <div
       id="play"
@@ -153,20 +165,22 @@ export const Play = () => {
         onEnded={prepareVideo}
         style={{ display: "none" }}
       />
-      <video
-        key={video} // forces video to update
-        width="320"
-        ref={videoRef}
-        onEnded={beginRecording}
-        >
-        <source
-          src={video}
-          type={type}
-        />
-      </video>
+      <div className={videoClass}>
+        <video
+          key={video} // forces video to update
+          width="320"
+          ref={videoRef}
+          onEnded={beginRecording}
+          >
+          <source
+            src={video}
+            type={type}
+          />
+        </video>
+      </div>
       <p>
         <span className="prompt">{prompt}</span>
-        <span className="cue">{cue}</span>
+        <span className={cueClass}>{cue}</span>
         <span>{mark}</span>
       </p>
 
