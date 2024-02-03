@@ -17,17 +17,20 @@ export const Choose = ({ goToPage }) => {
 
   const playSound = ({ target }) => {
     // TODO: play sound on mouseEnter
-    const sound = target.className  
+    const sound = target.className
   }
 
   const chooseSound = ({ target }) => {
-    const sound = target.className
+    const className = target.className
+    const sound = className.replace(/\s+current-sound/, "")
+
     if (sounds.indexOf(sound) < 0) {
-      // We're already at this sound
+      alert(`Unexpected sound: ${className}`)
+
     } else {
       setSound(sound)
+      goToPage("Demo")
     }
-    goToPage("Demo")
   }
 
   const soundButtons = sounds.map( symbol => {

@@ -101,8 +101,8 @@ function setSound( state, sound, word ) {
 
 function setWord( state, word ) {
   if (typeof word !== "string") {
-    // Force Play to go to the Choose page
-    return { ...state, sound: undefined }
+    // Force Play to go to the Success page
+    return { ...state, word }
   }
 
   const { languageData } = state

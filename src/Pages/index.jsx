@@ -11,6 +11,7 @@ import { Welcome } from "./Welcome"
 import { Choose } from "./Choose"
 import { Demo } from "./Demo"
 import { Play } from "./Play"
+import { Success } from "./Success"
 import { Settings } from "./Settings"
 import { Menu } from "../Menu"
 
@@ -19,6 +20,7 @@ const pages = {
   Choose,
   Demo,
   Play,
+  Success,
   Settings
 }
 

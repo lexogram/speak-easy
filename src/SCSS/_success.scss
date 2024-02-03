@@ -1,0 +1,15 @@
+#success {
+  & {
+    width: var(--size)
+  }
+
+  h1 {
+    text-align: center;
+    color: gold;
+  }
+  span,
+  em {
+    color: gold;
+    text-transform: capitalize;
+  }
+}

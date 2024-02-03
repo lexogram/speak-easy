@@ -25,7 +25,7 @@ export const Welcome = ({ goToPage, ready }) => {
         onClick={() => goToPage("Choose")}
         disabled={!ready}
        >
-        Start
+        Choose a Sound to Practise
        </button>
     </div>
   )

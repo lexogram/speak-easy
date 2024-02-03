@@ -14,11 +14,13 @@ import { Buttons } from './Buttons'
 
 const CUE_REGEX = /(.*)\|\s*([^.!?]*)([.!?])?/
 let timeOut
+let lastWord
 
 
 export const Play = () => {
   const {
     sound,
+    word,
     files,
     startRecording,
     stopRecording,
@@ -33,9 +35,7 @@ export const Play = () => {
     goToPage
   } = useContext(Context)
 
-  if (!sound) {
-    return goToPage("Choose")
-  }
+  lastWord = word
 
   const audioRef = useRef()
   const videoRef = useRef()
@@ -103,7 +103,25 @@ export const Play = () => {
   }
 
 
+  const showSuccess = () => {
+    let timedOut = true
+    setTimeout(() => {
+      timedOut = false
+    }, 0)
+
+    // Clean up function will be triggered if this is not the
+    // StrictMode test and the last word was undefined, so an
+    // empty string was rendered.
+    return () => {
+      if (!timedOut && !lastWord) {
+        goToPage("Success")
+      }
+    }
+  }
+
+
   useEffect(doAutoRun, [audio])
+  useEffect(showSuccess, [!word])
 
 
 
@@ -114,6 +132,11 @@ export const Play = () => {
     endRecording,
     showNext,
     playPrompt,
+  }
+
+
+  if (!word) {
+    return ""
   }
 
 
