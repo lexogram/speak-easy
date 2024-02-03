@@ -23,8 +23,10 @@ export const getRecorder = async(callback, audio) => {
       };
 
       const stopRecording = () => {
-        mediaRecorder.stop()
-        console.log("media recorder stopped")
+        if (mediaRecorder.state === "recording") {
+          mediaRecorder.stop()
+          console.log("media recorder stopped")
+        }
       }
 
       const saveRecording = () => {

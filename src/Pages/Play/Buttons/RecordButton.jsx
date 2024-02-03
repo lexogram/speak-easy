@@ -10,7 +10,7 @@ import { Button } from './Button'
 export const RecordButton = (props) => {
   const { step } = props
   const isActive = step === "record"
-
+  
   const colours = {
     bgh: "#711",
     bgd: "#400",

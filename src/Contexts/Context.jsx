@@ -72,6 +72,8 @@ export const Provider = ({ children }) => {
 
   const [ ready, setReady ] = useState(false)
   const [ page, setPage ] = useState("Welcome")
+  // step is used to highlight the currently active button in
+  // Play when autoRun is true
   const [ step, setStep ] = useState()
   const [ menuIsOpen, setMenuIsOpen ] = useState(false)
   const [ menuShown, setMenuShown ] = useState(false)
@@ -114,9 +116,9 @@ export const Provider = ({ children }) => {
   } = state
 
   if (word) {
+    // word has been selected, played, recorded or listened to
     storage.setItem("word", word)
   }
-
 
   const startRecording = startRef.current
   const stopRecording = stopRef.current

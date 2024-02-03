@@ -18,7 +18,6 @@ export const Button = ({
 
   const isActive = step === role
 
-
   const c = {
     bg:  "var(--dark)",
     bgh: "#171",
@@ -30,8 +29,8 @@ export const Button = ({
     cd:  "#fff",
     ...colours
   }
-  
-  
+
+
   const toggleHover = ({ type }) => {
     setHover(type === "mouseenter")
   }

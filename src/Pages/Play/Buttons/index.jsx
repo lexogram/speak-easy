@@ -10,7 +10,7 @@ import { RecordButton } from './RecordButton'
 
 
 export const Buttons = ({ listeners, auto }) => {
-  const { step } = useContext(Context)
+  const { autoRun, step } = useContext(Context)
 
   return (
     <div id="buttons">
@@ -18,7 +18,7 @@ export const Buttons = ({ listeners, auto }) => {
         action={listeners.playPrompt}
         name="Play"
         role="play"
-        step={step}
+        step={autoRun && step}
       />
       <RecordButton
         action={listeners.beginRecording}
@@ -30,19 +30,19 @@ export const Buttons = ({ listeners, auto }) => {
         action={listeners.endRecording}
         name="Stop"
         role="stop"
-        step={step}
+        step={autoRun && step}
       />
       <Button
         action={listeners.playBack}
         name="Listen"
         role="listen"
-        step={step}
+        step={autoRun && step}
       />
       <Button
         action={listeners.showNext}
         name="Next"
         role="next"
-        step={step}
+        step={autoRun && step}
       />
     </div>
   )

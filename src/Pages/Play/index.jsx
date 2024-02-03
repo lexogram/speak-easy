@@ -13,6 +13,7 @@ import { Buttons } from './Buttons'
 
 
 const CUE_REGEX = /(.*)\|\s*([^.!?]*)([.!?])?/
+let timeOut
 
 
 export const Play = () => {
@@ -53,41 +54,43 @@ export const Play = () => {
 
 
   const prepareVideo = () => {
-    setTimeout(startVideo, cueDelay)
+    timeOut = setTimeout(startVideo, cueDelay)
   }
 
 
   const startVideo = () => {
-    const video = videoRef.current
-    if (video) {
-      video.play()
-    }
+    videoRef.current.play()
   }
 
 
   const beginRecording = ({ type }) => {
     if (autoRun || type === "click") {
-      setTimeout(endRecording, duration)
-    
+      timeOut = setTimeout(endRecording, duration)
+
       setStep("record")
-
-    } else {
-      setStep()
+      startRecording()
     }
-
-    startRecording()
   }
 
 
   const endRecording = () => {
     stopRecording()
-    if (autoRun) {
-      setTimeout(showNext, duration + pause)
-      setStep("listen")
+    timeOut = setTimeout(nextWord, duration)
+    setStep("listen")
+  }
 
-    } else {
-      setStep()
+
+  const nextWord = () => {
+    setStep("next")
+    if (autoRun) {
+      timeOut = setTimeout(showNext, pause)
     }
+  }
+
+
+  const cleanUp = () => {
+    stopRecording() // no error if no recording in progress
+    clearTimeout(timeOut)
   }
 
 
@@ -95,6 +98,8 @@ export const Play = () => {
     if (autoRun) {
       playPrompt()
     }
+
+    return cleanUp
   }
 
 
