@@ -10,7 +10,8 @@ import { Button } from './Button'
 export const RecordButton = (props) => {
   const { step } = props
   const isActive = step === "record"
-  
+  const disabled = !isActive && step !== "canRecord"
+
   const colours = {
     bgh: "#711",
     bgd: "#400",
@@ -25,6 +26,7 @@ export const RecordButton = (props) => {
       <Button
         {...props}
         colours={colours}
+        disabled={disabled}
       />
       <div className="frame">
         <div className={className} />

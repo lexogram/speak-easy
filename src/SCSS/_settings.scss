@@ -3,8 +3,8 @@
   --height: 1.5rem;
   --border: 1px solid var(--light);
 
-  & > * {
-    margin-bottom: 2em;
+  & > div > * {
+    margin-bottom: 1em;
   }
 
   h1 {

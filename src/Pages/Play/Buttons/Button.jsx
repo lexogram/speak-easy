@@ -11,7 +11,8 @@ export const Button = ({
   role,
   name,
   colours={},
-  step
+  step,
+  disabled
 }) => {
   const [ hover, setHover ] = useState(false)
   const [ down, setDown ] = useState(false)
@@ -65,6 +66,7 @@ export const Button = ({
       onMouseDown={toggleDown}
       onClick={action}
       style={style}
+      disabled={disabled}
     >
       {name}
     </button>

@@ -72,6 +72,8 @@ export const Provider = ({ children }) => {
 
   const [ ready, setReady ] = useState(false)
   const [ page, setPage ] = useState("Welcome")
+  const [ lastPage, setLastPage ] = useState(page)
+
   // step is used to highlight the currently active button in
   // Play when autoRun is true
   const [ step, setStep ] = useState()
@@ -185,6 +187,13 @@ export const Provider = ({ children }) => {
 
 
   const goToPage = page => {
+    if (typeof page !== "string") {
+      // Call came from settings
+      page = lastPage
+    } else if (page !== "Settings") {
+      setLastPage(page)
+    }
+
     setPage(page)
 
     if (!menuShown) {

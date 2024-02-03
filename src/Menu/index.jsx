@@ -46,15 +46,25 @@ export const Menu = () => {
   })
 
 
-  const toggleOpen = () => {
-    setOpen(!open)
-    setMenuIsOpen(!open)
+  const toggleOpen = boolean => {
+    if (boolean === true) {
+      // The user clicked on the Menu icon
+      document.body.addEventListener(
+        "mousedown", toggleOpen, { once: true }
+      )
+
+    } else { // either a click on the icon, or anywhere else
+      boolean = false
+    }
+
+    setOpen(boolean)
+    setMenuIsOpen(boolean)
   }
 
 
   useEffect(() => {
     if (menuShown) {
-      setTimeout(toggleOpen, HIDE_MENU_DELAY)
+      setTimeout(toggleOpen, HIDE_MENU_DELAY, false)
     }
   }, [menuShown])
 

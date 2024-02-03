@@ -18,15 +18,11 @@
  *    5. Settings
  */
 
+import React, { useContext } from "react";
+import { Context } from "../../Contexts/Context";
 
-import React, { useContext } from 'react'
-import { Context } from '../../Contexts/Context'
-
-import { SelectSlider } from './Widgets/SelectSlider'
-import { Checkbox } from './Widgets/Checkbox'
-
-
-
+import { SelectSlider } from "./Widgets/SelectSlider";
+import { Checkbox } from "./Widgets/Checkbox";
 
 export const Settings = (props) => {
   const {
@@ -47,51 +43,53 @@ export const Settings = (props) => {
     pauseStrings,
     settingTitles,
     scanning,
-    setScanning
-  } = useContext(Context)
-  
+    setScanning,
+    goToPage
+  } = useContext(Context);
 
   return (
     <div id="settings">
-      <h1>Settings: recording</h1>
-      <hr />
-      <Checkbox
-        id="auto-run"
-        title={settingTitles["auto-run"]}
-        checked={autoRun}
-        action={() => setAutoRun(!autoRun)}
-      />
-      <SelectSlider
-        title={settingTitles["pause"]}
-        className="pause"
-        stringMap={pauseStrings}
-        value={pause}
-        action={setPause}
-      />
-      <SelectSlider
-        title={settingTitles["delay"]}
-        stringMap={delayStrings}
-        value={cueDelay}
-        action={setCueDelay}
-      />
-      <SelectSlider
-        title={settingTitles["duration"]}
-        stringMap={durationStrings}
-        value={duration}
-        action={setDuration}
-      />
-      <Checkbox
-        id="show-video"
-        title={settingTitles["show-video"]}
-        checked={showVideo}
-        action={() => setShowVideo(!showVideo)}
-      />
-      <Checkbox
-        id="silent-video"
-        title={settingTitles["silent-video"]}
-        checked={silentVideo}
-        action={() => setSilentVideo(!silentVideo)}
-      />
+      <div className="recording">
+        <h1>Settings: recording</h1>
+        <hr />
+        <Checkbox
+          id="auto-run"
+          title={settingTitles["auto-run"]}
+          checked={autoRun}
+          action={() => setAutoRun(!autoRun)}
+        />
+        <SelectSlider
+          title={settingTitles["pause"]}
+          className="pause"
+          stringMap={pauseStrings}
+          value={pause}
+          action={setPause}
+        />
+        <SelectSlider
+          title={settingTitles["delay"]}
+          stringMap={delayStrings}
+          value={cueDelay}
+          action={setCueDelay}
+        />
+        <SelectSlider
+          title={settingTitles["duration"]}
+          stringMap={durationStrings}
+          value={duration}
+          action={setDuration}
+        />
+        <Checkbox
+          id="show-video"
+          title={settingTitles["show-video"]}
+          checked={showVideo}
+          action={() => setShowVideo(!showVideo)}
+        />
+        <Checkbox
+          id="silent-video"
+          title={settingTitles["silent-video"]}
+          checked={silentVideo}
+          action={() => setSilentVideo(!silentVideo)}
+        />
+      </div>
       <div className="scanning">
         <h1>Settings: scanning</h1>
         <hr />
@@ -128,7 +126,13 @@ export const Settings = (props) => {
           />
           <span>{settingTitles["one-touch"]}</span>
         </label>
-            </div>
       </div>
-  )
-}
+      <hr />
+      <button
+        onClick={goToPage}
+      >
+        Done
+      </button>
+    </div>
+  );
+};

@@ -66,9 +66,10 @@ export const Play = () => {
   const beginRecording = ({ type }) => {
     if (autoRun || type === "click") {
       timeOut = setTimeout(endRecording, duration)
-
-      setStep("record")
       startRecording()
+      setStep("record")
+    } else {
+      setStep("canRecord")
     }
   }
 

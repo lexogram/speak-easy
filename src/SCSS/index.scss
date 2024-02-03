@@ -74,11 +74,11 @@ button {
     background-color: #000;
   }
 
-  &:disabled {
-    border-style: solid;
-    border-color: var(--disabled-bg);
-    background-color: var(--disabled-bg);
-    color: var(--disabled);
-    cursor: default;
+  &:disabled  {
+    border-style: solid !important;
+    border-color: var(--disabled-bg) !important;
+    background-color: var(--disabled-bg) !important;
+    color: var(--disabled) !important;
+    cursor: default !important;
   }
 }
