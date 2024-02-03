@@ -15,6 +15,9 @@ import storage from './Storage'
 import { fetchData } from './FetchData'
 import { getRecorder } from './Record'
 
+console.log("storage.get():", storage.get());
+
+
 
 const DEFAULT_CUE_DELAY = 500
 const delayStrings = {
@@ -110,6 +113,10 @@ export const Provider = ({ children }) => {
     files
   } = state
 
+  if (word) {
+    storage.setItem("word", word)
+  }
+
 
   const startRecording = startRef.current
   const stopRecording = stopRef.current
@@ -134,6 +141,9 @@ export const Provider = ({ children }) => {
 
 
   const initializeReducer = payload => {
+    const { language, sound, word } = storage.get()
+
+    payload = { ...payload, language, sound, word }
     const action = {
       type: "SET_DATA",
       payload
@@ -163,16 +173,6 @@ export const Provider = ({ children }) => {
   }
 
 
-  const setWord = payload => {
-    const action = {
-      type: "SET_WORD",
-      payload
-    }
-
-    dispatch(action)
-  }
-
-
   const showNext = () => {
     const action = {
       type: "SHOW_NEXT"
@@ -192,15 +192,11 @@ export const Provider = ({ children }) => {
 
   const interceptLanguage = value => {
     setLanguage(value)
-    storage.setItem("language", value) 
+    storage.setItem("language", value)
   }
   const interceptSound = value => {
     setSound(value)
     storage.setItem("sound", value)
-  }
-  const interceptWord = value => {
-    setWord(value)
-    storage.setItem("word", value)
   }
   const interceptAutoRun = value => {
     setAutoRun(value)
@@ -260,7 +256,6 @@ export const Provider = ({ children }) => {
 
         setLanguage: interceptLanguage,
         setSound:    interceptSound,
-        setWord:     interceptWord,
         showNext,
 
         step,

@@ -58,7 +58,10 @@ export const Play = () => {
 
 
   const startVideo = () => {
-    videoRef.current.play()
+    const video = videoRef.current
+    if (video) {
+      video.play()
+    }
   }
 
 

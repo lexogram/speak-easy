@@ -60,11 +60,15 @@ const reducer = (state, action) => {
 
 
 function setData( state, payload ) {
-  const { phrasesData } = payload
-  const language = Object.keys(phrasesData)[1]
-  state = { phrasesData }
+  let { phrasesData, language, sound, word } = payload
+  language = language || Object.keys(phrasesData)[1]
+  state = setLanguage({ phrasesData }, language )
 
-  return setLanguage( state, language )
+  if (sound) {
+    return setSound( state, sound, word )
+  }
+
+  return state
 }
 
 
@@ -80,14 +84,15 @@ function setLanguage( state, language ) {
 
 
 
-function setSound( state, sound ) {
-  // Choose the first word with this sound
+function setSound( state, sound, word ) {
+  // Choose the first word with this sound if call is not from
+  // setData
   const { languageData } = state
   const soundData = languageData[sound]
 
   state.demo = soundData["--demo--"]
 
-  const word = Object.keys(soundData)[0]
+  word = word || Object.keys(soundData)[0]
 
   return setWord(state, word)
 }
