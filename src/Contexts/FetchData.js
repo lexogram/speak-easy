@@ -1,5 +1,27 @@
 /**
  * src/Contexts/FetchData.jsx
+ *
+ * Reads the contents of src/assets/index.json
+ * Generates relative URLs for all images and recordings
+ * Replaces .txt file names with the contents of the files
+ *
+ * Calls the callback with an object with the format:
+ *
+ * { "uk": {
+ *     "b": {
+ *       "--demo--": {
+ *         video: <relative URL>,
+ *         text: <string>
+ *       },
+ *     "01-bee": {
+ *       audio: <relative URL>,
+ *       video: <relative URL>,
+ *       image: <relative URL>,
+ *       text:  <string>
+ *     }, ...
+ *   }, ...
+ *   "ru": { ... }
+ * }
  */
 
 

@@ -1,0 +1,15 @@
+#error {
+  padding: 1em;
+  width: var(--size);
+  background-color: #420;
+  border: 1px inset #840;
+
+  & h1 {
+    font-size: 1.5rem;
+  }
+
+  & button {
+    border-color: #960;
+    background-color: #840;
+  }
+}

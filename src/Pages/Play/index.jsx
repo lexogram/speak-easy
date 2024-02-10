@@ -7,9 +7,12 @@ import React, {
   useContext,
   useRef,
   useEffect,
+  useState
 } from 'react'
 import { Context } from '../../Contexts/Context'
 import { Buttons } from './Buttons'
+import { getMediaRecorder } from './Recorder'
+import { getDateTime } from '../../Utilities/dateTime'
 
 
 const CUE_REGEX = /(.*)\|\s*([^.!?]*)([.!?])?/
@@ -22,8 +25,6 @@ export const Play = () => {
     sound,
     word,
     files,
-    startRecording,
-    stopRecording,
     showNext,
     step,
     setStep,
@@ -40,6 +41,15 @@ export const Play = () => {
 
   const audioRef = useRef()
   const videoRef = useRef()
+  const stopRef = useRef(() => { console.log("stub")})
+  const stopRecording = stopRef.current
+
+  const [ saveAs, setSaveAs ] = useState()
+  const [ render, setRender ] = useState(0)
+
+  console.log("render:", render, "step", step)
+  console.log("saveAs:", saveAs);
+
 
 
   const { text, audio, video, image } = (files || {})
@@ -65,11 +75,76 @@ export const Play = () => {
   }
 
 
+  const setRecorder = (error, mediaRecorder) => {
+    if (error) {
+      return alert(error)
+    }
+
+    const saveRecording = () => {
+      console.log("saveRecording called")
+      const type = mediaRecorder.mimeType
+      const blob = new Blob(chunks, { type })
+      const src = window.URL.createObjectURL(blob)
+
+      const { date, time, now } = getDateTime()
+      const user = "_id"
+      const saveAs = {
+        user,
+        sound,
+        word,
+        date: now,
+        src,
+        url: `${user}/${date}/${sound}/${word}-${time}.webm`
+      }
+      setSaveAs(saveAs)
+
+      console.log("render:", render, ", saveAs:", saveAs);
+
+      setStep("listen")
+    }
+
+    const chunks = []
+    mediaRecorder.onstop = saveRecording
+
+    mediaRecorder.ondataavailable = ({data}) => {
+      chunks.push(data);
+      console.log("pushing data")
+    };
+
+    const stopRecording = stopRef.current = () => {
+      if (mediaRecorder.state === "recording") {
+        mediaRecorder.stop()
+        console.log("media recorder stopped")
+      }
+    }
+
+    setTimeout(stopRecording, duration)
+
+    mediaRecorder.start()
+    setStep("record")
+  }
+
+
+  // const treatRecording = (error, { stopRecording, blob }) => {
+  //   if (error) {
+  //     return alert(error)
+  //   }
+
+  //   if (stopRecording) {
+  //     stopRef.current = stopRecording
+  //     timeOut = setTimeout(endRecording, duration)
+  //     setStep("record")
+
+  //   } else if (blob) {
+  //     saveAs.src = blob
+  //   }
+  // }
+
+
   const beginRecording = ({ type }) => {
     if (autoRun || type === "click") {
-      timeOut = setTimeout(endRecording, duration)
-      startRecording()
-      setStep("record")
+      getMediaRecorder(setRecorder)
+
     } else {
       setStep("canRecord")
     }
@@ -78,8 +153,38 @@ export const Play = () => {
 
   const endRecording = () => {
     stopRecording()
-    timeOut = setTimeout(nextWord, duration)
+    // timeOut = setTimeout(nextWord, duration)
+    console.log("saveAs:", saveAs);
+
     setStep("listen")
+  }
+
+  // const audioURL = window.URL.createObjectURL(blob)
+  // audio.src = audioURL
+  // console.log("recording saved")
+  // audio.play()
+
+  const playBack = () => {
+    if (step !== "listen") {
+      return
+    }
+
+    const { src } = (saveAs || {})
+    console.log("render:", render, ", playback src:", src);
+
+    if (src) {
+      const audio = new Audio()
+      audio.src = src
+      audio.play()
+
+      if (autoRun) {
+        timeOut = setTimeout(nextWord, audio.duration)
+      }
+
+    } else {
+      alert("no sound to play")
+      console.log("playBack saveAs:", saveAs);
+    }
   }
 
 
@@ -92,7 +197,10 @@ export const Play = () => {
 
 
   const cleanUp = () => {
-    stopRecording() // no error if no recording in progress
+    stopRecording && stopRecording()
+    // no error if no recording in progress
+    audioRef.current && audioRef.current.pause()
+    videoRef.current && videoRef.current.pause()
     clearTimeout(timeOut)
   }
 
@@ -125,7 +233,8 @@ export const Play = () => {
 
   useEffect(doAutoRun, [audio])
   useEffect(showSuccess, [!word])
-
+  useEffect(() => setRender(render + 1), [step])
+  useEffect(playBack, [step === "listen"])
 
 
   const type = video.match(/\.mpg$/i) ? "video/mpeg" : "video/mp4"
@@ -133,6 +242,7 @@ export const Play = () => {
   const listeners = {
     beginRecording,
     endRecording,
+    playBack,
     showNext,
     playPrompt,
   }

@@ -27,6 +27,7 @@ export const Menu = () => {
   const pageMap = [
     { key: "Play", name: "Activity", disabled: !sound},
     { key: "Demo", name: "Demo", disabled: !sound },
+    { key: "Recordings", name: "Recordings" },
     { key: "Choose", name: "Choose" },
     { key: "Settings", name: "Settings" }
   ]

@@ -40,6 +40,9 @@ const reducer = (state, action) => {
     case "SET_DATA":
       return setData(state, payload)
 
+    case "LOAD_RECORDINGS":
+      return loadRecordings(state, payload)
+
     case "SET_LANGUAGE":
       return setLanguage(state, payload)
 
@@ -62,13 +65,19 @@ const reducer = (state, action) => {
 function setData( state, payload ) {
   let { phrasesData, language, sound, word } = payload
   language = language || Object.keys(phrasesData)[1]
-  state = setLanguage({ phrasesData }, language )
+  state.phrasesData = phrasesData
+  state = setLanguage( state , language )
 
   if (sound) {
     return setSound( state, sound, word )
   }
 
-  return state
+  return { ...state }
+}
+
+
+function loadRecordings(state, recordings) {
+  return { ...state, recordings }
 }
 
 

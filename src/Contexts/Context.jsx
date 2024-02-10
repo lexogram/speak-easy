@@ -13,9 +13,8 @@ import React, {
 import { reducer, initialState } from './Reducer'
 import storage from './Storage'
 import { fetchData } from './FetchData'
-import { getRecorder } from './Record'
-
-console.log("storage.get():", storage.get());
+import { fetchRecordings } from './FetchRecordings'
+// import { getRecorder } from '../Pages/Play/Recorder'
 
 
 
@@ -67,10 +66,12 @@ export const Context = createContext()
 
 export const Provider = ({ children }) => {
 
-  const startRef = useRef()
-  const stopRef = useRef()
-  const playRef = useRef()
+  // const startRef = useRef()
+  // const stopRef = useRef()
+  // const playRef = useRef()
+  // const recorderRef = useRef()
 
+  const [ error, setError ] = useState("")
   const [ ready, setReady ] = useState(false)
   const [ page, setPage ] = useState("Welcome")
   const [ lastPage, setLastPage ] = useState(page)
@@ -109,7 +110,6 @@ export const Provider = ({ children }) => {
   )
 
 
-
   const [state, dispatch] = useReducer(reducer, initialState)
   const {
     language,
@@ -118,32 +118,35 @@ export const Provider = ({ children }) => {
     demo,
     words,
     word,
-    files
+    files,
+    recordings
   } = state
+
 
   if (word) {
     // word has been selected, played, recorded or listened to
     storage.setItem("word", word)
   }
 
-  const startRecording = startRef.current
-  const stopRecording = stopRef.current
-  const playback = playRef.current
+  // const startRecording = startRef.current
+  // const stopRecording = stopRef.current
+  // const playback = playRef.current
+  // const newRecording = recorderRef.current
 
 
-  const recorderCallback = ( error, controls ) => {
-    if (error) {
-      // TODO: Warn the user that recording won't work
-      alert(error)
-      return
-    }
+  // const getRecorderCallback = ( error, newRecording ) => {
+  //   if (error) {
+  //     setError(error)
+  //     return goToPage("Error")
+  //   }
 
-    const { startRecording, stopRecording, playback } = controls
+  //   // const { startRecording, stopRecording, playback } = controls
 
-    startRef.current = startRecording
-    stopRef.current = stopRecording
-    playRef.current = playback
-  }
+  //   // startRef.current = startRecording
+  //   // stopRef.current = stopRecording
+  //   // playRef.current = playback
+  //   recorderRef.current = newRecording
+  // }
 
 
 
@@ -154,6 +157,16 @@ export const Provider = ({ children }) => {
     payload = { ...payload, language, sound, word }
     const action = {
       type: "SET_DATA",
+      payload
+    }
+
+    dispatch(action)
+  }
+
+
+  const loadRecordings = payload => {
+    const action = {
+      type: "LOAD_RECORDINGS",
       payload
     }
 
@@ -247,10 +260,22 @@ export const Provider = ({ children }) => {
   }
 
 
+  const checkForUserMedia = () => {
+    if ( !navigator.mediaDevices
+      || !navigator.mediaDevices.getUserMedia
+       ) {
+      setError(
+        "MediaDevices.getUserMedia() is not supported on your browser.\nIt will not be possible to record your voice."
+      )
+      goToPage("Error")
+    }
+  }
+
+
+  useEffect(checkForUserMedia, [])
   useEffect(() => { fetchData(initializeReducer) }, [])
-  useEffect(() => {
-    getRecorder(recorderCallback, new Audio())
-  }, [])
+  useEffect(() => { fetchRecordings(loadRecordings) }, [])
+  // useEffect(() => { getRecorder(getRecorderCallback )}, [])
   useEffect(() => {
     setReady(!!sounds)
   }, [sounds])
@@ -259,11 +284,13 @@ export const Provider = ({ children }) => {
   return (
     <Context.Provider
       value ={{
+        error,
         ready,
 
-        startRecording,
-        stopRecording,
-        playback,
+        // startRecording,
+        // stopRecording,
+        // playback,
+        // newRecording,
 
         language,
         sounds,
@@ -298,6 +325,8 @@ export const Provider = ({ children }) => {
         pauseStrings,
         settingTitles,
         scanning,
+
+        recordings,
 
         setAutoRun:      interceptAutoRun,
         setCueDelay:     interceptCueDelay,
