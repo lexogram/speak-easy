@@ -29,9 +29,11 @@
   --darkly: rgba(var(--r), var(--g), var(--b), var(--a));
   --disabled: #666;
   --disabled-bg: #333;
-  --menu-width: max(80px, min(10em, 20vw));
+  --menu-width: max(80px, min(8em, 25vw));
   --content-width: calc(100vw - var(--menu-width));
 
+  --height: 1.5rem;
+  --border: 1px solid var(--light);
 
   color: var(--light);
   background-color: var(--dark);
@@ -81,5 +83,51 @@ button {
     background-color: var(--disabled-bg) !important;
     color: var(--disabled) !important;
     cursor: default !important;
+  }
+}
+
+
+.checkbox {
+  & {
+    display: block;
+    cursor: pointer;
+  }
+
+  input {
+    position: absolute;
+    width: 0;
+    visibility: hidden;
+    left: - 999px
+  }
+
+  .toggle,
+  .toggle::after {
+    display: inline-block;
+    height: var(--height);
+    border: var(--border);
+    border-radius: 100vmax;
+  }
+  .toggle {
+    position: relative;
+    width: calc(2 * var(--height));
+    border: var(--border);
+    border-radius: 100vmax;
+    vertical-align: middle;
+  }
+  .toggle::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: var(--height);
+    box-sizing: border-box;
+    background-color: var(--light);
+    border-color: var(--dark);
+    transition: left 0.2s;
+  }
+  input:checked ~ .toggle::after {
+    left: 50%;
+  }
+  span {
+    margin-left: 0.25em;
   }
 }

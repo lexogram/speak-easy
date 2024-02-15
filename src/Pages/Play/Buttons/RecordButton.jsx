@@ -10,7 +10,11 @@ import { Button } from './Button'
 export const RecordButton = (props) => {
   const { step } = props
   const isActive = step === "record"
-  const disabled = !isActive && step !== "canRecord"
+  // const disabled = !isActive && step !== "canRecord"
+  const disabled = !isActive && (!step || step === "play")
+
+  console.log("Record step:", step, ",isActive:", isActive, ", disabled:", disabled);
+
 
   const colours = {
     bgh: "#711",

@@ -44,6 +44,7 @@
     .record-button {
       display: inline-block;
       position: relative; /* for .frame and .progress */
+      vertical-align: middle; /* so 2-line text is centred */
       width: var(--width);
     }
 

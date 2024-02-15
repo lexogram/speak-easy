@@ -11,7 +11,7 @@ import React, {
 } from 'react'
 import { Context } from '../../Contexts/Context'
 import { Buttons } from './Buttons'
-import { getMediaRecorder } from './Recorder'
+import { startRecording, stopRecording } from './Recorder'
 import { getDateTime } from '../../Utilities/dateTime'
 
 
@@ -22,6 +22,7 @@ let lastWord
 
 export const Play = () => {
   const {
+    mimeType,
     sound,
     word,
     files,
@@ -29,9 +30,9 @@ export const Play = () => {
     step,
     setStep,
     autoRun,
-    cueDelay,
-    duration,
-    pause,
+    cueDelay, // pause between prompt audio and cue video
+    duration, // duration of the audio recording
+    pause,    // pause between end of listen & next word prompt
     showVideo,
     silentVideo,
     goToPage
@@ -41,16 +42,8 @@ export const Play = () => {
 
   const audioRef = useRef()
   const videoRef = useRef()
-  const stopRef = useRef(() => { console.log("stub")})
-  const stopRecording = stopRef.current
 
   const [ saveAs, setSaveAs ] = useState()
-  const [ render, setRender ] = useState(0)
-
-  console.log("render:", render, "step", step)
-  console.log("saveAs:", saveAs);
-
-
 
   const { text, audio, video, image } = (files || {})
   const [ , prompt, cue, mark ] = text
@@ -59,6 +52,7 @@ export const Play = () => {
 
 
   const playPrompt = () => {
+    audioRef.current.src = audio
     audioRef.current.play()
     setStep("play")
   }
@@ -75,75 +69,62 @@ export const Play = () => {
   }
 
 
-  const setRecorder = (error, mediaRecorder) => {
+  /**
+   * recordingCallback() should be called twice for each time
+   * startRecording() is called.
+   * - Once when the UserMedia audio stream is ready for the
+   *   recording to begin, in which case `startTime` will be a
+   *   date object (which is in fact ignored)
+   * - A second time shortly after stopRecording() was called,
+   *   when the saveRecording() listener for the `stop` event
+   *   has finished processing the recorded audio. In this case,
+   *   `src` will contain a blob URL which can be assigned to
+   *   an Audio object and played back and saved to a file either
+   *   locally or on a remote server.
+   */
+  const recordingCallback = (error, { startTime, src }) => {
     if (error) {
-      return alert(error)
+      return alert(`ERROR: ${error}`)
     }
 
-    const saveRecording = () => {
-      console.log("saveRecording called")
-      const type = mediaRecorder.mimeType
-      const blob = new Blob(chunks, { type })
-      const src = window.URL.createObjectURL(blob)
+    if (startTime) {
+      console.log("recordingStarted")
+      if (isNaN(duration)) {
+        // Wait for a click on Stop Recording
+      } else {
+        timeOut = setTimeout(endRecording, duration)
+      }
 
+    } else if (src) {
+      console.log("recording saved")
       const { date, time, now } = getDateTime()
+
       const user = "_id"
       const saveAs = {
         user,
         sound,
         word,
         date: now,
-        src,
+        src, // should be a blob url
         url: `${user}/${date}/${sound}/${word}-${time}.webm`
       }
       setSaveAs(saveAs)
 
-      console.log("render:", render, ", saveAs:", saveAs);
+      console.log(`setSaveAs(${saveAs})`);
 
-      setStep("listen")
+      playBack(src)
     }
-
-    const chunks = []
-    mediaRecorder.onstop = saveRecording
-
-    mediaRecorder.ondataavailable = ({data}) => {
-      chunks.push(data);
-      console.log("pushing data")
-    };
-
-    const stopRecording = stopRef.current = () => {
-      if (mediaRecorder.state === "recording") {
-        mediaRecorder.stop()
-        console.log("media recorder stopped")
-      }
-    }
-
-    setTimeout(stopRecording, duration)
-
-    mediaRecorder.start()
-    setStep("record")
   }
-
-
-  // const treatRecording = (error, { stopRecording, blob }) => {
-  //   if (error) {
-  //     return alert(error)
-  //   }
-
-  //   if (stopRecording) {
-  //     stopRef.current = stopRecording
-  //     timeOut = setTimeout(endRecording, duration)
-  //     setStep("record")
-
-  //   } else if (blob) {
-  //     saveAs.src = blob
-  //   }
-  // }
 
 
   const beginRecording = ({ type }) => {
     if (autoRun || type === "click") {
-      getMediaRecorder(setRecorder)
+      // startRecording is asynchronous. The recordingCallback()
+      // callback will be called when the promise for
+      // navigator.mediaDevices.getUserMedia() is resolved and
+      // again, later, when the recording has been saved.
+      startRecording(mimeType, recordingCallback)
+      setStep("record")
 
     } else {
       setStep("canRecord")
@@ -152,39 +133,32 @@ export const Play = () => {
 
 
   const endRecording = () => {
+    clearTimeout(timeOut)
+    console.log("endRecording")
     stopRecording()
-    // timeOut = setTimeout(nextWord, duration)
-    console.log("saveAs:", saveAs);
-
-    setStep("listen")
+    // stopRecording is asynchronous. The recordingCallback()
+    // function will be called with a `src` audio URL when the
+    // recording has been saved.
   }
 
-  // const audioURL = window.URL.createObjectURL(blob)
-  // audio.src = audioURL
-  // console.log("recording saved")
-  // audio.play()
 
-  const playBack = () => {
-    if (step !== "listen") {
-      return
-    }
-
-    const { src } = (saveAs || {})
-    console.log("render:", render, ", playback src:", src);
-
-    if (src) {
-      const audio = new Audio()
-      audio.src = src
-      audio.play()
-
-      if (autoRun) {
-        timeOut = setTimeout(nextWord, audio.duration)
-      }
+  const playBack = (srcOrClickEvent) => {
+    if (srcOrClickEvent.type === "click" && step === "listen") {
+      // The user clicked on the Listen button
+      audioRef.current.play()
 
     } else {
-      alert("no sound to play")
-      console.log("playBack saveAs:", saveAs);
+      // srcOrClickEvent is a blob audio url
+      const audio = audioRef.current
+      audio.src = srcOrClickEvent
+      setStep("listen")
+
+      if (autoRun) {
+        audio.play()
+      }
     }
+
+    console.log("audioRef.current.src:", audioRef.current.src);
   }
 
 
@@ -233,8 +207,6 @@ export const Play = () => {
 
   useEffect(doAutoRun, [audio])
   useEffect(showSuccess, [!word])
-  useEffect(() => setRender(render + 1), [step])
-  useEffect(playBack, [step === "listen"])
 
 
   const type = video.match(/\.mpg$/i) ? "video/mpeg" : "video/mp4"
@@ -263,6 +235,11 @@ export const Play = () => {
     : "cue"
 
 
+  const audioEnded = step === "play"
+    ? prepareVideo
+    : nextWord
+
+
   return (
     <div
       id="play"
@@ -272,7 +249,7 @@ export const Play = () => {
       <audio
         src={audio}
         ref={audioRef}
-        onEnded={prepareVideo}
+        onEnded={audioEnded}
         style={{ display: "none" }}
       />
       <div className={videoClass}>

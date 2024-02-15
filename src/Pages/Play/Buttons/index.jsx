@@ -12,6 +12,12 @@ import { RecordButton } from './RecordButton'
 export const Buttons = ({ listeners, auto }) => {
   const { autoRun, step } = useContext(Context)
 
+  const disabled = {
+    record: step === "play",
+    stop:   step !== "record",
+    listen: ![ "listen", "next" ].includes(step),
+  }
+
   return (
     <div id="buttons">
       <Button
@@ -28,15 +34,17 @@ export const Buttons = ({ listeners, auto }) => {
       />
       <Button
         action={listeners.endRecording}
-        name="Stop"
+        name="Stop Recording"
         role="stop"
         step={autoRun && step}
+        disabled={disabled.stop}
       />
       <Button
         action={listeners.playBack}
         name="Listen"
         role="listen"
         step={autoRun && step}
+        disabled={disabled.listen}
       />
       <Button
         action={listeners.showNext}

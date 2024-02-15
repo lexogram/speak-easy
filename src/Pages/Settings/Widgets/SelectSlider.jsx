@@ -99,7 +99,7 @@ export const SelectSlider = ({
   className = `select-slider ${className ? className : ""}`
 
 
-  useEffect(placeThumb, [value])
+  useEffect(placeThumb, [value, range])
 
 
   return (

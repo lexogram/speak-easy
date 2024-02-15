@@ -6,6 +6,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Context } from '../Contexts/Context'
 import { Icon } from './Icon'
+import { Checkbox } from '../Pages/Settings/Widgets/Checkbox'
 
 
 
@@ -18,10 +19,12 @@ export const Menu = () => {
     goToPage,
     setMenuIsOpen,
     menuShown,
-    sound
+    sound,
+    autoRun,
+    setAutoRun,
+    settingTitles
   } = useContext(Context)
   const [ open, setOpen ] = useState(true)
-
 
 
   const pageMap = [
@@ -33,6 +36,20 @@ export const Menu = () => {
   ]
 
 
+  const setPage = ({target}) => {
+    const className = target.className
+    const isTarget = pageMap.find(
+      pageData => pageData.key === className
+    )
+
+    if (!isTarget) {
+      return
+    }
+
+    goToPage(className)
+  }
+
+
   const buttons = pageMap.map(({ key, name, disabled }) => {
     const className = `${key}${key === page ? " current-page" : ""}`
     return (
@@ -40,6 +57,7 @@ export const Menu = () => {
         key={key}
         className={className}
         disabled={disabled}
+        onClick={setPage}
       >
         {name}
       </button>
@@ -70,20 +88,6 @@ export const Menu = () => {
   }, [menuShown])
 
 
-  const setPage = ({target}) => {
-    const className = target.className
-    const isTarget = pageMap.find(
-      pageData => pageData.key === className
-    )
-
-    if (!isTarget) {
-      return
-    }
-
-    goToPage(className)
-  }
-
-
 
   const style = {
     left: (open ? 0 : "calc(-1 * var(--menu-width))")
@@ -92,14 +96,21 @@ export const Menu = () => {
 
   return (
     <div id="menu"
-      onClick={setPage}
       style={style}
     >
       <Icon
         open={open}
         setOpen={toggleOpen}
       />
+
       <div className="items">
+        <Checkbox
+          id="auto-run"
+          title={settingTitles["auto-run"]}
+          checked={autoRun}
+          action={() => setAutoRun(!autoRun)}
+        />
+
         {buttons}
       </div>
     </div>

@@ -28,6 +28,14 @@ export const Settings = (props) => {
   const {
     autoRun,
     setAutoRun,
+
+    scanning,
+    setScanning,
+    showRepeat,
+    setShowRepeat,
+    scanMenu,
+    setScanMenu,
+
     cueDelay,
     setCueDelay,
     duration,
@@ -44,15 +52,20 @@ export const Settings = (props) => {
     durationStrings,
     pauseStrings,
     settingTitles,
-    scanning,
-    setScanning,
+
     goToPage
   } = useContext(Context);
 
+  // Prevent user from choosing "click" for duration with autoRun
+  const adjustedDurationStrings = {...durationStrings}
+  if (autoRun) {
+    delete adjustedDurationStrings["click"]
+  }
+
   return (
     <div id="settings">
-      <div className="recording">
-        <h1>Settings: recording</h1>
+      <div className="autorun">
+        <h1>Settings: autorun</h1>
         <hr />
         <Checkbox
           id="auto-run"
@@ -73,32 +86,9 @@ export const Settings = (props) => {
           value={cueDelay}
           action={setCueDelay}
         />
-        <SelectSlider
-          title={settingTitles["duration"]}
-          stringMap={durationStrings}
-          value={duration}
-          action={setDuration}
-        />
-        <Checkbox
-          id="show-video"
-          title={settingTitles["show-video"]}
-          checked={showVideo}
-          action={() => setShowVideo(!showVideo)}
-        />
-        <Checkbox
-          id="replay-prompt"
-          title={settingTitles["replay-prompt"]}
-          checked={replayPrompt}
-          action={() => setReplayPrompt(!replayPrompt)}
-        />
-        <Checkbox
-          id="silent-video"
-          title={settingTitles["silent-video"]}
-          checked={silentVideo}
-          action={() => setSilentVideo(!silentVideo)}
-        />
       </div>
-      <div className="scanning">
+
+      <div className="scanning disabled">
         <h1>Settings: scanning</h1>
         <hr />
         <label htmlFor="no-scanning">
@@ -134,8 +124,49 @@ export const Settings = (props) => {
           />
           <span>{settingTitles["one-touch"]}</span>
         </label>
+
+        <Checkbox
+          id="show-repeat"
+          title={settingTitles["show-repeat"]}
+          checked={showRepeat}
+          action={() => setShowRepeat(!showRepeat)}
+        />
+        <Checkbox
+          id="scan-menu"
+          title={settingTitles["scan-menu"]}
+          checked={scanMenu}
+          action={() => setScanMenu(!scanMenu)}
+        />
       </div>
-      <hr />
+
+      <div className="recording">
+          <h1>Settings: recording</h1>
+          <hr />
+        <SelectSlider
+          title={settingTitles["duration"]}
+          stringMap={adjustedDurationStrings}
+          value={duration}
+          action={setDuration}
+        />
+        <Checkbox
+          id="show-video"
+          title={settingTitles["show-video"]}
+          checked={showVideo}
+          action={() => setShowVideo(!showVideo)}
+        />
+        <Checkbox
+          id="replay-prompt"
+          title={settingTitles["replay-prompt"]}
+          checked={replayPrompt}
+          action={() => setReplayPrompt(!replayPrompt)}
+        />
+        <Checkbox
+          id="silent-video"
+          title={settingTitles["silent-video"]}
+          checked={silentVideo}
+          action={() => setSilentVideo(!silentVideo)}
+        />
+      </div>
       <button
         onClick={goToPage}
       >
